@@ -1,9 +1,16 @@
+import "dotenv/config";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
 
 async function main() {
+  const existing = await prisma.adminUser.count();
+  if (existing > 0) {
+    console.log("Database already seeded, skipping.");
+    return;
+  }
+
   await prisma.business.createMany({
     data: [
       { name: "Sharma Electronics", category: "Electronics", country: "India", city: "Ludhiana", status: "Verified", leads: 42, joined: new Date("2026-01-12") },
