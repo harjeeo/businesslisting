@@ -1,6 +1,7 @@
 import PageHeader from "../components/ui/PageHeader";
 import Table, { type Column } from "../components/ui/Table";
 import Badge from "../components/ui/Badge";
+import ActionButton from "../components/ui/ActionButton";
 import { adminUsers, type AdminUser } from "../data/dummy";
 
 const roleTone: Record<AdminUser["role"], "violet" | "gray"> = {
@@ -33,13 +34,9 @@ const columns: Column<AdminUser>[] = [
   {
     header: "Actions",
     render: () => (
-      <div className="flex gap-3 text-sm font-medium text-violet-600">
-        <button type="button" className="hover:underline">
-          Edit
-        </button>
-        <button type="button" className="hover:underline">
-          Remove
-        </button>
+      <div className="flex gap-2">
+        <ActionButton label="Edit" />
+        <ActionButton label="Remove" tone="danger" />
       </div>
     ),
   },

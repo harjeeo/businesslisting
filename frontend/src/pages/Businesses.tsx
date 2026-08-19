@@ -1,6 +1,7 @@
 import PageHeader from "../components/ui/PageHeader";
 import Table, { type Column } from "../components/ui/Table";
 import Badge from "../components/ui/Badge";
+import ActionButton from "../components/ui/ActionButton";
 import { businesses, type Business } from "../data/dummy";
 
 const statusTone: Record<Business["status"], "green" | "yellow" | "red"> = {
@@ -29,13 +30,9 @@ const columns: Column<Business>[] = [
   {
     header: "Actions",
     render: () => (
-      <div className="flex gap-3 text-sm font-medium text-violet-600">
-        <button type="button" className="hover:underline">
-          View
-        </button>
-        <button type="button" className="hover:underline">
-          Edit
-        </button>
+      <div className="flex gap-2">
+        <ActionButton label="View" />
+        <ActionButton label="Edit" />
       </div>
     ),
   },

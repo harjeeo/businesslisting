@@ -1,6 +1,7 @@
 import PageHeader from "../components/ui/PageHeader";
 import Table, { type Column } from "../components/ui/Table";
 import Badge from "../components/ui/Badge";
+import ActionButton from "../components/ui/ActionButton";
 import { categories, type Category } from "../data/dummy";
 
 const columns: Column<Category>[] = [
@@ -23,13 +24,9 @@ const columns: Column<Category>[] = [
   {
     header: "Actions",
     render: () => (
-      <div className="flex gap-3 text-sm font-medium text-violet-600">
-        <button type="button" className="hover:underline">
-          Edit
-        </button>
-        <button type="button" className="hover:underline">
-          Delete
-        </button>
+      <div className="flex gap-2">
+        <ActionButton label="Edit" />
+        <ActionButton label="Delete" tone="danger" />
       </div>
     ),
   },
