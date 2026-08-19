@@ -1,5 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import AdminLayout from "./layouts/AdminLayout";
+import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Businesses from "./pages/Businesses";
 import Users from "./pages/Users";
@@ -11,6 +12,7 @@ import Settings from "./pages/Settings";
 function App() {
   return (
     <Routes>
+      <Route path="/login" element={<Login />} />
       <Route element={<AdminLayout />}>
         <Route path="/" element={<Dashboard />} />
         <Route path="/businesses" element={<Businesses />} />
