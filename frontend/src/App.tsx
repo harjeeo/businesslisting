@@ -1,28 +1,24 @@
 import { Routes, Route } from "react-router-dom";
 import AdminLayout from "./layouts/AdminLayout";
 import Dashboard from "./pages/Dashboard";
-import ComingSoon from "./pages/ComingSoon";
+import Businesses from "./pages/Businesses";
+import Users from "./pages/Users";
+import Categories from "./pages/Categories";
+import Locations from "./pages/Locations";
+import AdminUsers from "./pages/AdminUsers";
+import Settings from "./pages/Settings";
 
 function App() {
   return (
     <Routes>
       <Route element={<AdminLayout />}>
         <Route path="/" element={<Dashboard />} />
-        <Route
-          path="/businesses"
-          element={<ComingSoon title="Businesses" />}
-        />
-        <Route path="/users" element={<ComingSoon title="Users" />} />
-        <Route
-          path="/categories"
-          element={<ComingSoon title="Categories" />}
-        />
-        <Route path="/locations" element={<ComingSoon title="Locations" />} />
-        <Route
-          path="/admin-users"
-          element={<ComingSoon title="Admin Users" />}
-        />
-        <Route path="/settings" element={<ComingSoon title="Settings" />} />
+        <Route path="/businesses" element={<Businesses />} />
+        <Route path="/users" element={<Users />} />
+        <Route path="/categories" element={<Categories />} />
+        <Route path="/locations" element={<Locations />} />
+        <Route path="/admin-users" element={<AdminUsers />} />
+        <Route path="/settings" element={<Settings />} />
       </Route>
     </Routes>
   );

@@ -1,9 +1,18 @@
+import { useLocation } from "react-router-dom";
 import { Notification01Icon } from "hugeicons-react";
+import { navItems } from "../config/navigation";
 
 export default function Topbar() {
+  const { pathname } = useLocation();
+  const current = navItems.find((item) =>
+    item.path === "/" ? pathname === "/" : pathname.startsWith(item.path)
+  );
+
   return (
     <header className="flex h-16 items-center justify-between border-b border-gray-200 bg-white px-6">
-      <h1 className="text-lg font-semibold text-gray-900">Dashboard</h1>
+      <h1 className="text-lg font-semibold text-gray-900">
+        {current?.label ?? "Dashboard"}
+      </h1>
 
       <div className="flex items-center gap-4">
         <button
