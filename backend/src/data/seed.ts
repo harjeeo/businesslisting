@@ -1,0 +1,96 @@
+import { createCollection } from "./store.js";
+import type {
+  Business,
+  User,
+  Category,
+  LocationRow,
+  AdminUser,
+  Product,
+  Service,
+  Lead,
+  Rfq,
+  Review,
+} from "../types/index.js";
+import bcrypt from "bcryptjs";
+
+export const businesses = createCollection<Business>([
+  { id: 1, name: "Sharma Electronics", category: "Electronics", country: "India", city: "Ludhiana", status: "Verified", leads: 42, joined: "2026-01-12" },
+  { id: 2, name: "Maple Web Studio", category: "IT Services", country: "Canada", city: "Toronto", status: "Verified", leads: 18, joined: "2026-02-03" },
+  { id: 3, name: "Delhi Packaging Co.", category: "Manufacturing", country: "India", city: "Delhi", status: "Pending", leads: 5, joined: "2026-03-21" },
+  { id: 4, name: "Brampton Grocers", category: "Retail", country: "Canada", city: "Brampton", status: "Verified", leads: 27, joined: "2026-02-18" },
+  { id: 5, name: "Singh Interiors", category: "Construction", country: "India", city: "Chandigarh", status: "Suspended", leads: 3, joined: "2025-11-30" },
+  { id: 6, name: "Toronto Legal Group", category: "Professional Services", country: "Canada", city: "Toronto", status: "Pending", leads: 9, joined: "2026-04-02" },
+]);
+
+export const users = createCollection<User>([
+  { id: 1, name: "Rahul Verma", email: "rahul.verma@example.com", role: "Customer", country: "India", status: "Active", joined: "2026-01-05" },
+  { id: 2, name: "Emily Johnson", email: "emily.j@example.com", role: "Business Owner", country: "Canada", status: "Active", joined: "2026-02-14" },
+  { id: 3, name: "Amit Sharma", email: "amit.sharma@example.com", role: "Business Owner", country: "India", status: "Active", joined: "2026-01-22" },
+  { id: 4, name: "Priya Kaur", email: "priya.kaur@example.com", role: "Customer", country: "Canada", status: "Blocked", joined: "2026-03-09" },
+  { id: 5, name: "Michael Lee", email: "michael.lee@example.com", role: "Customer", country: "Canada", status: "Active", joined: "2026-02-27" },
+]);
+
+export const categories = createCollection<Category>([
+  { id: 1, name: "Electronics", parent: null, businesses: 128, status: "Active" },
+  { id: 2, name: "Mobile Phones", parent: "Electronics", businesses: 54, status: "Active" },
+  { id: 3, name: "Construction", parent: null, businesses: 76, status: "Active" },
+  { id: 4, name: "Contractors", parent: "Construction", businesses: 31, status: "Active" },
+  { id: 5, name: "Professional Services", parent: null, businesses: 92, status: "Active" },
+  { id: 6, name: "Lawyers", parent: "Professional Services", businesses: 40, status: "Inactive" },
+]);
+
+export const locations = createCollection<LocationRow>([
+  { id: 1, country: "India", state: "Punjab", city: "Ludhiana", businesses: 145, status: "Active" },
+  { id: 2, country: "India", state: "Delhi", city: "New Delhi", businesses: 320, status: "Active" },
+  { id: 3, country: "India", state: "Chandigarh", city: "Chandigarh", businesses: 88, status: "Active" },
+  { id: 4, country: "Canada", state: "Ontario", city: "Toronto", businesses: 210, status: "Active" },
+  { id: 5, country: "Canada", state: "Ontario", city: "Brampton", businesses: 97, status: "Active" },
+  { id: 6, country: "Canada", state: "British Columbia", city: "Vancouver", businesses: 64, status: "Inactive" },
+]);
+
+const defaultPasswordHash = bcrypt.hashSync("password123", 10);
+
+export const adminUsers = createCollection<AdminUser>([
+  { id: 1, name: "Tanvir Kalsi", email: "tanvirkalsi93@gmail.com", role: "Super Admin", status: "Active", lastActive: "2026-08-19", passwordHash: defaultPasswordHash },
+  { id: 2, name: "Neha Gupta", email: "neha.gupta@example.com", role: "Admin", status: "Active", lastActive: "2026-08-18", passwordHash: defaultPasswordHash },
+  { id: 3, name: "James Miller", email: "james.miller@example.com", role: "Moderator", status: "Inactive", lastActive: "2026-08-01", passwordHash: defaultPasswordHash },
+]);
+
+export const products = createCollection<Product>([
+  { id: 1, name: "LED Panel Light 24W", business: "Sharma Electronics", category: "Electronics", price: "₹450", status: "Active", createdAt: "2026-05-02" },
+  { id: 2, name: "CCTV Camera Kit (4ch)", business: "Sharma Electronics", category: "Electronics", price: "₹8,999", status: "Pending", createdAt: "2026-07-14" },
+  { id: 3, name: "Corrugated Shipping Box", business: "Delhi Packaging Co.", category: "Manufacturing", price: "₹18/pc", status: "Active", createdAt: "2026-04-20" },
+  { id: 4, name: "Organic Basmati Rice 5kg", business: "Brampton Grocers", category: "Retail", price: "CAD 22.99", status: "Active", createdAt: "2026-06-11" },
+  { id: 5, name: "Modular Kitchen Cabinet", business: "Singh Interiors", category: "Construction", price: "On Request", status: "Rejected", createdAt: "2026-03-08" },
+]);
+
+export const services = createCollection<Service>([
+  { id: 1, name: "Website Design & Development", business: "Maple Web Studio", category: "IT Services", priceFrom: "CAD 1,200", status: "Active", createdAt: "2026-02-10" },
+  { id: 2, name: "Home Interior Consultation", business: "Singh Interiors", category: "Construction", priceFrom: "₹2,000", status: "Active", createdAt: "2026-03-15" },
+  { id: 3, name: "Immigration Document Filing", business: "Toronto Legal Group", category: "Professional Services", priceFrom: "CAD 350", status: "Pending", createdAt: "2026-07-01" },
+  { id: 4, name: "Packaging Design Consultation", business: "Delhi Packaging Co.", category: "Manufacturing", priceFrom: "₹5,000", status: "Active", createdAt: "2026-05-19" },
+]);
+
+export const leads = createCollection<Lead>([
+  { id: 1, business: "Sharma Electronics", customer: "Rahul Verma", interest: "CCTV Camera Kit (4ch)", status: "New", createdAt: "2026-08-15" },
+  { id: 2, business: "Maple Web Studio", customer: "Emily Johnson", interest: "Website Design & Development", status: "In Discussion", createdAt: "2026-08-10" },
+  { id: 3, business: "Brampton Grocers", customer: "Michael Lee", interest: "Organic Basmati Rice 5kg", status: "Won", createdAt: "2026-07-28" },
+  { id: 4, business: "Toronto Legal Group", customer: "Priya Kaur", interest: "Immigration Document Filing", status: "Quotation Sent", createdAt: "2026-08-02" },
+  { id: 5, business: "Delhi Packaging Co.", customer: "Amit Sharma", interest: "Corrugated Shipping Box", status: "Lost", createdAt: "2026-06-30" },
+  { id: 6, business: "Singh Interiors", customer: "Neha Gupta", interest: "Modular Kitchen Cabinet", status: "Contacted", createdAt: "2026-08-17" },
+]);
+
+export const rfqs = createCollection<Rfq>([
+  { id: 1, product: "Corrugated Shipping Box", customer: "Rahul Verma", quantity: "10,000 pcs", budget: "₹1,80,000", quotes: 3, status: "Open", createdAt: "2026-08-12" },
+  { id: 2, product: "LED Panel Light 24W", customer: "Amit Sharma", quantity: "500 units", budget: "₹2,00,000", quotes: 1, status: "Quoted", createdAt: "2026-08-05" },
+  { id: 3, product: "Website Design & Development", customer: "Emily Johnson", quantity: "1 project", budget: "CAD 1,500", quotes: 2, status: "Closed", createdAt: "2026-07-20" },
+  { id: 4, product: "Organic Basmati Rice 5kg", customer: "Michael Lee", quantity: "200 kg", budget: "CAD 900", quotes: 0, status: "Open", createdAt: "2026-08-16" },
+]);
+
+export const reviews = createCollection<Review>([
+  { id: 1, business: "Sharma Electronics", customer: "Rahul Verma", rating: 5, comment: "Great service and fast delivery.", status: "Approved", createdAt: "2026-07-01" },
+  { id: 2, business: "Maple Web Studio", customer: "Emily Johnson", rating: 4, comment: "Good work, minor delays.", status: "Approved", createdAt: "2026-06-18" },
+  { id: 3, business: "Toronto Legal Group", customer: "Priya Kaur", rating: 2, comment: "Slow response times.", status: "Pending", createdAt: "2026-08-14" },
+  { id: 4, business: "Delhi Packaging Co.", customer: "Amit Sharma", rating: 1, comment: "This looks like a fake/spam review.", status: "Pending", createdAt: "2026-08-17" },
+  { id: 5, business: "Brampton Grocers", customer: "Michael Lee", rating: 5, comment: "Best grocery store in the area!", status: "Approved", createdAt: "2026-05-25" },
+]);
