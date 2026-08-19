@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import PageHeader from "../components/ui/PageHeader";
 import Table, { type Column } from "../components/ui/Table";
 import Badge from "../components/ui/Badge";
 import ActionButton from "../components/ui/ActionButton";
-import AdminUserFormModal from "../components/forms/AdminUserFormModal";
-import { adminUsers as initialAdminUsers, type AdminUser } from "../data/dummy";
+import { useAdminData } from "../context/AdminDataContext";
+import type { AdminUser } from "../data/dummy";
 
 const roleTone: Record<AdminUser["role"], "violet" | "gray"> = {
   "Super Admin": "violet",
@@ -13,9 +13,8 @@ const roleTone: Record<AdminUser["role"], "violet" | "gray"> = {
 };
 
 export default function AdminUsers() {
-  const [adminUsers, setAdminUsers] = useState(initialAdminUsers);
-  const [editing, setEditing] = useState<AdminUser | null>(null);
-  const [showAdd, setShowAdd] = useState(false);
+  const navigate = useNavigate();
+  const { adminUsers, deleteAdminUser } = useAdminData();
 
   const columns: Column<AdminUser>[] = [
     {
@@ -42,13 +41,14 @@ export default function AdminUsers() {
       header: "Actions",
       render: (row) => (
         <div className="flex gap-2">
-          <ActionButton label="Edit" onClick={() => setEditing(row)} />
+          <ActionButton
+            label="Edit"
+            onClick={() => navigate(`/admin-users/${row.id}/edit`)}
+          />
           <ActionButton
             label="Remove"
             tone="danger"
-            onClick={() =>
-              setAdminUsers((prev) => prev.filter((a) => a.id !== row.id))
-            }
+            onClick={() => deleteAdminUser(row.id)}
           />
         </div>
       ),
@@ -61,39 +61,9 @@ export default function AdminUsers() {
         title="Admin Users"
         subtitle="Manage admin accounts and their permissions"
         addLabel="Invite Admin"
-        onAdd={() => setShowAdd(true)}
+        onAdd={() => navigate("/admin-users/new")}
       />
       <Table columns={columns} rows={adminUsers} />
-
-      {showAdd && (
-        <AdminUserFormModal
-          onClose={() => setShowAdd(false)}
-          onSave={(data) => {
-            setAdminUsers((prev) => [
-              ...prev,
-              {
-                ...data,
-                id: Math.max(0, ...prev.map((a) => a.id)) + 1,
-                lastActive: new Date().toISOString().slice(0, 10),
-              },
-            ]);
-            setShowAdd(false);
-          }}
-        />
-      )}
-
-      {editing && (
-        <AdminUserFormModal
-          admin={editing}
-          onClose={() => setEditing(null)}
-          onSave={(data) => {
-            setAdminUsers((prev) =>
-              prev.map((a) => (a.id === editing.id ? { ...a, ...data } : a))
-            );
-            setEditing(null);
-          }}
-        />
-      )}
     </div>
   );
 }

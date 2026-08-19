@@ -1,19 +1,14 @@
-import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import PageHeader from "../components/ui/PageHeader";
 import Table, { type Column } from "../components/ui/Table";
 import Badge from "../components/ui/Badge";
 import ActionButton from "../components/ui/ActionButton";
-import CategoryFormModal from "../components/forms/CategoryFormModal";
-import { categories as initialCategories, type Category } from "../data/dummy";
+import { useAdminData } from "../context/AdminDataContext";
+import type { Category } from "../data/dummy";
 
 export default function Categories() {
-  const [categories, setCategories] = useState(initialCategories);
-  const [editing, setEditing] = useState<Category | null>(null);
-  const [showAdd, setShowAdd] = useState(false);
-
-  const parentOptions = categories
-    .filter((c) => c.parent === null)
-    .map((c) => c.name);
+  const navigate = useNavigate();
+  const { categories, deleteCategory } = useAdminData();
 
   const columns: Column<Category>[] = [
     {
@@ -36,13 +31,14 @@ export default function Categories() {
       header: "Actions",
       render: (row) => (
         <div className="flex gap-2">
-          <ActionButton label="Edit" onClick={() => setEditing(row)} />
+          <ActionButton
+            label="Edit"
+            onClick={() => navigate(`/categories/${row.id}/edit`)}
+          />
           <ActionButton
             label="Delete"
             tone="danger"
-            onClick={() =>
-              setCategories((prev) => prev.filter((c) => c.id !== row.id))
-            }
+            onClick={() => deleteCategory(row.id)}
           />
         </div>
       ),
@@ -55,42 +51,10 @@ export default function Categories() {
         title="Categories"
         subtitle="Manage categories, sub-categories and child categories"
         addLabel="Add Category"
-        onAdd={() => setShowAdd(true)}
+        onAdd={() => navigate("/categories/new")}
         onSearch
       />
       <Table columns={columns} rows={categories} />
-
-      {showAdd && (
-        <CategoryFormModal
-          parentOptions={parentOptions}
-          onClose={() => setShowAdd(false)}
-          onSave={(data) => {
-            setCategories((prev) => [
-              ...prev,
-              {
-                ...data,
-                id: Math.max(0, ...prev.map((c) => c.id)) + 1,
-                businesses: 0,
-              },
-            ]);
-            setShowAdd(false);
-          }}
-        />
-      )}
-
-      {editing && (
-        <CategoryFormModal
-          category={editing}
-          parentOptions={parentOptions.filter((p) => p !== editing.name)}
-          onClose={() => setEditing(null)}
-          onSave={(data) => {
-            setCategories((prev) =>
-              prev.map((c) => (c.id === editing.id ? { ...c, ...data } : c))
-            );
-            setEditing(null);
-          }}
-        />
-      )}
     </div>
   );
 }

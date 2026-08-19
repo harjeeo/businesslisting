@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import PageHeader from "../components/ui/PageHeader";
 import Table, { type Column } from "../components/ui/Table";
 import Badge from "../components/ui/Badge";
 import ActionButton from "../components/ui/ActionButton";
-import BusinessFormModal from "../components/forms/BusinessFormModal";
-import { businesses as initialBusinesses, type Business } from "../data/dummy";
+import { useAdminData } from "../context/AdminDataContext";
+import type { Business } from "../data/dummy";
 
 const statusTone: Record<Business["status"], "green" | "yellow" | "red"> = {
   Verified: "green",
@@ -13,9 +13,8 @@ const statusTone: Record<Business["status"], "green" | "yellow" | "red"> = {
 };
 
 export default function Businesses() {
-  const [businesses, setBusinesses] = useState(initialBusinesses);
-  const [editing, setEditing] = useState<Business | null>(null);
-  const [showAdd, setShowAdd] = useState(false);
+  const navigate = useNavigate();
+  const { businesses } = useAdminData();
 
   const columns: Column<Business>[] = [
     {
@@ -39,7 +38,10 @@ export default function Businesses() {
       render: (row) => (
         <div className="flex gap-2">
           <ActionButton label="View" />
-          <ActionButton label="Edit" onClick={() => setEditing(row)} />
+          <ActionButton
+            label="Edit"
+            onClick={() => navigate(`/businesses/${row.id}/edit`)}
+          />
         </div>
       ),
     },
@@ -51,41 +53,10 @@ export default function Businesses() {
         title="Businesses"
         subtitle="Manage all registered businesses across India and Canada"
         addLabel="Add Business"
-        onAdd={() => setShowAdd(true)}
+        onAdd={() => navigate("/businesses/new")}
         onSearch
       />
       <Table columns={columns} rows={businesses} />
-
-      {showAdd && (
-        <BusinessFormModal
-          onClose={() => setShowAdd(false)}
-          onSave={(data) => {
-            setBusinesses((prev) => [
-              ...prev,
-              {
-                ...data,
-                id: Math.max(0, ...prev.map((b) => b.id)) + 1,
-                leads: 0,
-                joined: new Date().toISOString().slice(0, 10),
-              },
-            ]);
-            setShowAdd(false);
-          }}
-        />
-      )}
-
-      {editing && (
-        <BusinessFormModal
-          business={editing}
-          onClose={() => setEditing(null)}
-          onSave={(data) => {
-            setBusinesses((prev) =>
-              prev.map((b) => (b.id === editing.id ? { ...b, ...data } : b))
-            );
-            setEditing(null);
-          }}
-        />
-      )}
     </div>
   );
 }

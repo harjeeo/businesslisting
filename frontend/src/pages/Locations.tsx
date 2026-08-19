@@ -1,15 +1,14 @@
-import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import PageHeader from "../components/ui/PageHeader";
 import Table, { type Column } from "../components/ui/Table";
 import Badge from "../components/ui/Badge";
 import ActionButton from "../components/ui/ActionButton";
-import LocationFormModal from "../components/forms/LocationFormModal";
-import { locations as initialLocations, type LocationRow } from "../data/dummy";
+import { useAdminData } from "../context/AdminDataContext";
+import type { LocationRow } from "../data/dummy";
 
 export default function Locations() {
-  const [locations, setLocations] = useState(initialLocations);
-  const [editing, setEditing] = useState<LocationRow | null>(null);
-  const [showAdd, setShowAdd] = useState(false);
+  const navigate = useNavigate();
+  const { locations, deleteLocation } = useAdminData();
 
   const columns: Column<LocationRow>[] = [
     { header: "Country", render: (row) => row.country },
@@ -26,13 +25,14 @@ export default function Locations() {
       header: "Actions",
       render: (row) => (
         <div className="flex gap-2">
-          <ActionButton label="Edit" onClick={() => setEditing(row)} />
+          <ActionButton
+            label="Edit"
+            onClick={() => navigate(`/locations/${row.id}/edit`)}
+          />
           <ActionButton
             label="Delete"
             tone="danger"
-            onClick={() =>
-              setLocations((prev) => prev.filter((l) => l.id !== row.id))
-            }
+            onClick={() => deleteLocation(row.id)}
           />
         </div>
       ),
@@ -45,40 +45,10 @@ export default function Locations() {
         title="Locations"
         subtitle="Countries, states/provinces, cities and areas"
         addLabel="Add Location"
-        onAdd={() => setShowAdd(true)}
+        onAdd={() => navigate("/locations/new")}
         onSearch
       />
       <Table columns={columns} rows={locations} />
-
-      {showAdd && (
-        <LocationFormModal
-          onClose={() => setShowAdd(false)}
-          onSave={(data) => {
-            setLocations((prev) => [
-              ...prev,
-              {
-                ...data,
-                id: Math.max(0, ...prev.map((l) => l.id)) + 1,
-                businesses: 0,
-              },
-            ]);
-            setShowAdd(false);
-          }}
-        />
-      )}
-
-      {editing && (
-        <LocationFormModal
-          location={editing}
-          onClose={() => setEditing(null)}
-          onSave={(data) => {
-            setLocations((prev) =>
-              prev.map((l) => (l.id === editing.id ? { ...l, ...data } : l))
-            );
-            setEditing(null);
-          }}
-        />
-      )}
     </div>
   );
 }
