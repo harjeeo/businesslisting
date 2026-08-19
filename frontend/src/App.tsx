@@ -21,6 +21,10 @@ import Services from "./pages/Services";
 import Leads from "./pages/Leads";
 import Rfqs from "./pages/Rfqs";
 import Reviews from "./pages/Reviews";
+import Subscriptions from "./pages/Subscriptions";
+import Payments from "./pages/Payments";
+import Advertisements from "./pages/Advertisements";
+import Cms from "./pages/Cms";
 import Settings from "./pages/Settings";
 
 function App() {
@@ -48,6 +52,11 @@ function App() {
         <Route path="/leads" element={<Leads />} />
         <Route path="/rfqs" element={<Rfqs />} />
         <Route path="/reviews" element={<Reviews />} />
+
+        <Route path="/subscriptions" element={<Subscriptions />} />
+        <Route path="/payments" element={<Payments />} />
+        <Route path="/advertisements" element={<Advertisements />} />
+        <Route path="/cms" element={<Cms />} />
 
         <Route path="/locations" element={<Locations />} />
         <Route path="/locations/new" element={<LocationForm />} />

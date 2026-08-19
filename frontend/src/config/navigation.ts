@@ -11,6 +11,10 @@ import {
   Target01Icon,
   FileValidationIcon,
   StarIcon,
+  Wallet01Icon,
+  CreditCardIcon,
+  Megaphone01Icon,
+  Layout02Icon,
 } from "hugeicons-react";
 import type { NavItem } from "../types/nav";
 
@@ -24,6 +28,10 @@ export const navItems: NavItem[] = [
   { label: "Leads", path: "/leads", icon: Target01Icon },
   { label: "RFQs", path: "/rfqs", icon: FileValidationIcon },
   { label: "Reviews", path: "/reviews", icon: StarIcon },
+  { label: "Subscriptions", path: "/subscriptions", icon: Wallet01Icon },
+  { label: "Payments", path: "/payments", icon: CreditCardIcon },
+  { label: "Advertisements", path: "/advertisements", icon: Megaphone01Icon },
+  { label: "CMS", path: "/cms", icon: Layout02Icon },
   { label: "Locations", path: "/locations", icon: Location01Icon },
   { label: "Admin Users", path: "/admin-users", icon: UserGroupIcon },
   { label: "Settings", path: "/settings", icon: Settings02Icon },

@@ -189,3 +189,115 @@ export const reviews: Review[] = [
   { id: 4, business: "Delhi Packaging Co.", customer: "Amit Sharma", rating: 1, comment: "This looks like a fake/spam review.", status: "Pending", createdAt: "2026-08-17" },
   { id: 5, business: "Brampton Grocers", customer: "Michael Lee", rating: 5, comment: "Best grocery store in the area!", status: "Approved", createdAt: "2026-05-25" },
 ];
+
+export interface SubscriptionPlan {
+  id: number;
+  name: string;
+  price: string;
+  billingCycle: "Monthly" | "Yearly";
+  subscribers: number;
+  status: "Active" | "Inactive";
+}
+
+export const subscriptionPlans: SubscriptionPlan[] = [
+  { id: 1, name: "Free", price: "₹0 / CAD 0", billingCycle: "Monthly", subscribers: 210, status: "Active" },
+  { id: 2, name: "Basic", price: "₹999 / CAD 19", billingCycle: "Monthly", subscribers: 84, status: "Active" },
+  { id: 3, name: "Premium", price: "₹2,499 / CAD 49", billingCycle: "Monthly", subscribers: 37, status: "Active" },
+  { id: 4, name: "Premium Annual", price: "₹24,999 / CAD 490", billingCycle: "Yearly", subscribers: 12, status: "Active" },
+];
+
+export interface Transaction {
+  id: number;
+  business: string;
+  plan: string;
+  amount: string;
+  gateway: "Razorpay" | "Stripe";
+  status: "Success" | "Pending" | "Failed";
+  date: string;
+}
+
+export const transactions: Transaction[] = [
+  { id: 1, business: "Sharma Electronics", plan: "Basic", amount: "₹999", gateway: "Razorpay", status: "Success", date: "2026-08-01" },
+  { id: 2, business: "Maple Web Studio", plan: "Premium", amount: "CAD 49", gateway: "Stripe", status: "Success", date: "2026-08-03" },
+  { id: 3, business: "Toronto Legal Group", plan: "Basic", amount: "CAD 19", gateway: "Stripe", status: "Pending", date: "2026-08-15" },
+  { id: 4, business: "Delhi Packaging Co.", plan: "Premium", amount: "₹2,499", gateway: "Razorpay", status: "Failed", date: "2026-08-10" },
+  { id: 5, business: "Brampton Grocers", plan: "Basic", amount: "CAD 19", gateway: "Stripe", status: "Success", date: "2026-07-29" },
+];
+
+export interface Advertisement {
+  id: number;
+  business: string;
+  placement: "Homepage Banner" | "Search Results" | "Category Page" | "Featured Listing";
+  startDate: string;
+  endDate: string;
+  clicks: number;
+  status: "Active" | "Scheduled" | "Expired";
+}
+
+export const advertisements: Advertisement[] = [
+  { id: 1, business: "Sharma Electronics", placement: "Homepage Banner", startDate: "2026-08-01", endDate: "2026-08-31", clicks: 1240, status: "Active" },
+  { id: 2, business: "Maple Web Studio", placement: "Featured Listing", startDate: "2026-07-15", endDate: "2026-08-15", clicks: 860, status: "Active" },
+  { id: 3, business: "Brampton Grocers", placement: "Search Results", startDate: "2026-09-01", endDate: "2026-09-30", clicks: 0, status: "Scheduled" },
+  { id: 4, business: "Toronto Legal Group", placement: "Category Page", startDate: "2026-06-01", endDate: "2026-06-30", clicks: 430, status: "Expired" },
+];
+
+export interface CmsPage {
+  id: number;
+  title: string;
+  slug: string;
+  status: "Published" | "Draft";
+  updatedAt: string;
+}
+
+export const cmsPages: CmsPage[] = [
+  { id: 1, title: "Home", slug: "/", status: "Published", updatedAt: "2026-08-10" },
+  { id: 2, title: "About Us", slug: "/about-us", status: "Published", updatedAt: "2026-06-02" },
+  { id: 3, title: "Contact Us", slug: "/contact-us", status: "Published", updatedAt: "2026-05-20" },
+  { id: 4, title: "FAQ", slug: "/faq", status: "Published", updatedAt: "2026-07-11" },
+  { id: 5, title: "Terms & Conditions", slug: "/terms", status: "Published", updatedAt: "2026-01-15" },
+  { id: 6, title: "Privacy Policy", slug: "/privacy", status: "Published", updatedAt: "2026-01-15" },
+  { id: 7, title: "Cookie Policy", slug: "/cookie-policy", status: "Draft", updatedAt: "2026-08-16" },
+  { id: 8, title: "Refund Policy", slug: "/refund-policy", status: "Draft", updatedAt: "2026-08-16" },
+  { id: 9, title: "Advertising Policy", slug: "/advertising-policy", status: "Published", updatedAt: "2026-04-09" },
+  { id: 10, title: "Business Guidelines", slug: "/business-guidelines", status: "Published", updatedAt: "2026-03-22" },
+];
+
+export interface Banner {
+  id: number;
+  title: string;
+  position: "Homepage Top" | "Homepage Middle" | "Category Page";
+  status: "Active" | "Inactive";
+}
+
+export const banners: Banner[] = [
+  { id: 1, title: "Diwali Business Signup Offer", position: "Homepage Top", status: "Active" },
+  { id: 2, title: "Canada Expansion Announcement", position: "Homepage Middle", status: "Active" },
+  { id: 3, title: "List Your Business Free", position: "Category Page", status: "Inactive" },
+];
+
+export interface Faq {
+  id: number;
+  question: string;
+  answer: string;
+  status: "Published" | "Draft";
+}
+
+export const faqs: Faq[] = [
+  { id: 1, question: "How do I list my business?", answer: "Register as a business owner and complete your profile.", status: "Published" },
+  { id: 2, question: "Is listing free?", answer: "Yes, the Free plan lets you create a basic listing.", status: "Published" },
+  { id: 3, question: "How does business verification work?", answer: "We verify via email, mobile OTP and admin review.", status: "Draft" },
+];
+
+export interface BlogPost {
+  id: number;
+  title: string;
+  author: string;
+  status: "Published" | "Draft";
+  publishedAt: string;
+}
+
+export const blogPosts: BlogPost[] = [
+  { id: 1, title: "5 Tips to Get More Leads as a Local Business", author: "Neha Gupta", status: "Published", publishedAt: "2026-07-20" },
+  { id: 2, title: "Expanding Your Business from India to Canada", author: "Tanvir Kalsi", status: "Published", publishedAt: "2026-06-05" },
+  { id: 3, title: "How Verified Badges Build Customer Trust", author: "Neha Gupta", status: "Draft", publishedAt: "2026-08-18" },
+];
