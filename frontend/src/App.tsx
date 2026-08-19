@@ -16,6 +16,11 @@ import LocationDetail from "./pages/LocationDetail";
 import AdminUsers from "./pages/AdminUsers";
 import AdminUserForm from "./pages/AdminUserForm";
 import AdminUserDetail from "./pages/AdminUserDetail";
+import Products from "./pages/Products";
+import Services from "./pages/Services";
+import Leads from "./pages/Leads";
+import Rfqs from "./pages/Rfqs";
+import Reviews from "./pages/Reviews";
 import Settings from "./pages/Settings";
 
 function App() {
@@ -37,6 +42,12 @@ function App() {
         <Route path="/categories/new" element={<CategoryForm />} />
         <Route path="/categories/:id" element={<CategoryDetail />} />
         <Route path="/categories/:id/edit" element={<CategoryForm />} />
+
+        <Route path="/products" element={<Products />} />
+        <Route path="/services" element={<Services />} />
+        <Route path="/leads" element={<Leads />} />
+        <Route path="/rfqs" element={<Rfqs />} />
+        <Route path="/reviews" element={<Reviews />} />
 
         <Route path="/locations" element={<Locations />} />
         <Route path="/locations/new" element={<LocationForm />} />
