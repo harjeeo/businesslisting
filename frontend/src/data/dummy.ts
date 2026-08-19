@@ -1,21 +1,39 @@
 export interface Business {
   id: number;
   name: string;
+  businessType: string;
   category: string;
+  subCategory: string;
+  description: string;
+  establishedYear: string;
+  employees: string;
   country: "India" | "Canada";
+  state: string;
   city: string;
+  address: string;
+  postalCode: string;
+  lat: number;
+  lng: number;
+  phone: string;
+  whatsapp: string;
+  email: string;
+  website: string;
+  logoUrl: string;
+  coverUrl: string;
+  galleryUrls: string[];
+  videoUrl: string;
   status: "Verified" | "Pending" | "Suspended";
   leads: number;
   joined: string;
 }
 
 export const businesses: Business[] = [
-  { id: 1, name: "Sharma Electronics", category: "Electronics", country: "India", city: "Ludhiana", status: "Verified", leads: 42, joined: "2026-01-12" },
-  { id: 2, name: "Maple Web Studio", category: "IT Services", country: "Canada", city: "Toronto", status: "Verified", leads: 18, joined: "2026-02-03" },
-  { id: 3, name: "Delhi Packaging Co.", category: "Manufacturing", country: "India", city: "Delhi", status: "Pending", leads: 5, joined: "2026-03-21" },
-  { id: 4, name: "Brampton Grocers", category: "Retail", country: "Canada", city: "Brampton", status: "Verified", leads: 27, joined: "2026-02-18" },
-  { id: 5, name: "Singh Interiors", category: "Construction", country: "India", city: "Chandigarh", status: "Suspended", leads: 3, joined: "2025-11-30" },
-  { id: 6, name: "Toronto Legal Group", category: "Professional Services", country: "Canada", city: "Toronto", status: "Pending", leads: 9, joined: "2026-04-02" },
+  { id: 1, name: "Sharma Electronics", businessType: "Retailer", category: "Electronics", subCategory: "Mobile Phones", description: "Leading electronics retailer in Ludhiana offering LED lighting, CCTV and mobile accessories.", establishedYear: "2012", employees: "11-50", country: "India", state: "Punjab", city: "Ludhiana", address: "123 Model Town Road", postalCode: "141002", lat: 30.901, lng: 75.8573, phone: "+91 98765 43210", whatsapp: "+91 98765 43210", email: "contact@sharmaelectronics.in", website: "https://sharmaelectronics.in", logoUrl: "", coverUrl: "", galleryUrls: [], videoUrl: "", status: "Verified", leads: 42, joined: "2026-01-12" },
+  { id: 2, name: "Maple Web Studio", businessType: "Service Provider", category: "IT Services", subCategory: "Web Development", description: "Web design and development studio serving small businesses across Ontario.", establishedYear: "2018", employees: "1-10", country: "Canada", state: "Ontario", city: "Toronto", address: "45 King Street West", postalCode: "M5H 1J8", lat: 43.6511, lng: -79.3832, phone: "+1 416 555 0134", whatsapp: "+1 416 555 0134", email: "hello@maplewebstudio.ca", website: "https://maplewebstudio.ca", logoUrl: "", coverUrl: "", galleryUrls: [], videoUrl: "", status: "Verified", leads: 18, joined: "2026-02-03" },
+  { id: 3, name: "Delhi Packaging Co.", businessType: "Manufacturer", category: "Manufacturing", subCategory: "Packaging Materials", description: "Manufacturer of corrugated boxes and packaging solutions for B2B clients.", establishedYear: "2005", employees: "51-200", country: "India", state: "Delhi", city: "Delhi", address: "Plot 22, Okhla Industrial Area", postalCode: "110020", lat: 28.5355, lng: 77.2725, phone: "+91 98111 22334", whatsapp: "+91 98111 22334", email: "sales@delhipackaging.in", website: "", logoUrl: "", coverUrl: "", galleryUrls: [], videoUrl: "", status: "Pending", leads: 5, joined: "2026-03-21" },
+  { id: 4, name: "Brampton Grocers", businessType: "Retailer", category: "Retail", subCategory: "Grocery Store", description: "Indian grocery store offering fresh produce and imported goods.", establishedYear: "2015", employees: "11-50", country: "Canada", state: "Ontario", city: "Brampton", address: "88 Queen Street East", postalCode: "L6V 1B2", lat: 43.6852, lng: -79.7594, phone: "+1 905 555 0198", whatsapp: "+1 905 555 0198", email: "info@bramptongrocers.ca", website: "https://bramptongrocers.ca", logoUrl: "", coverUrl: "", galleryUrls: [], videoUrl: "", status: "Verified", leads: 27, joined: "2026-02-18" },
+  { id: 5, name: "Singh Interiors", businessType: "Service Provider", category: "Construction", subCategory: "Interior Design", description: "Interior design and modular furniture for residential and commercial spaces.", establishedYear: "2010", employees: "11-50", country: "India", state: "Chandigarh", city: "Chandigarh", address: "SCO 145, Sector 34", postalCode: "160022", lat: 30.7194, lng: 76.7654, phone: "+91 98140 55667", whatsapp: "+91 98140 55667", email: "studio@singhinteriors.in", website: "", logoUrl: "", coverUrl: "", galleryUrls: [], videoUrl: "", status: "Suspended", leads: 3, joined: "2025-11-30" },
+  { id: 6, name: "Toronto Legal Group", businessType: "Professional", category: "Professional Services", subCategory: "Immigration Law", description: "Immigration and business law firm serving newcomers to Canada.", establishedYear: "2009", employees: "11-50", country: "Canada", state: "Ontario", city: "Toronto", address: "200 Bay Street", postalCode: "M5J 2J1", lat: 43.6462, lng: -79.3806, phone: "+1 416 555 0177", whatsapp: "+1 416 555 0177", email: "info@torontolegalgroup.ca", website: "https://torontolegalgroup.ca", logoUrl: "", coverUrl: "", galleryUrls: [], videoUrl: "", status: "Pending", leads: 9, joined: "2026-04-02" },
 ];
 
 export interface User {

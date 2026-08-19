@@ -1,12 +1,26 @@
-import type { SelectHTMLAttributes, InputHTMLAttributes, ReactNode } from "react";
+import type {
+  SelectHTMLAttributes,
+  InputHTMLAttributes,
+  TextareaHTMLAttributes,
+  ReactNode,
+} from "react";
 
-function Wrapper({ label, children }: { label: string; children: ReactNode }) {
+function Wrapper({
+  label,
+  hint,
+  children,
+}: {
+  label: string;
+  hint?: string;
+  children: ReactNode;
+}) {
   return (
     <label className="block">
       <span className="mb-1.5 block text-sm font-medium text-gray-700">
         {label}
       </span>
       {children}
+      {hint && <span className="mt-1 block text-xs text-gray-400">{hint}</span>}
     </label>
   );
 }
@@ -16,11 +30,24 @@ const inputClasses =
 
 export function TextField({
   label,
+  hint,
   ...rest
-}: { label: string } & InputHTMLAttributes<HTMLInputElement>) {
+}: { label: string; hint?: string } & InputHTMLAttributes<HTMLInputElement>) {
   return (
-    <Wrapper label={label}>
+    <Wrapper label={label} hint={hint}>
       <input className={inputClasses} {...rest} />
+    </Wrapper>
+  );
+}
+
+export function TextareaField({
+  label,
+  hint,
+  ...rest
+}: { label: string; hint?: string } & TextareaHTMLAttributes<HTMLTextAreaElement>) {
+  return (
+    <Wrapper label={label} hint={hint}>
+      <textarea className={`${inputClasses} resize-none`} rows={4} {...rest} />
     </Wrapper>
   );
 }
