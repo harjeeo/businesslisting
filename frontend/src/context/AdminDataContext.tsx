@@ -4,10 +4,12 @@ import {
   categories as initialCategories,
   locations as initialLocations,
   adminUsers as initialAdminUsers,
+  users as initialUsers,
   type Business,
   type Category,
   type LocationRow,
   type AdminUser,
+  type User,
 } from "../data/dummy";
 
 type BusinessInput = Omit<Business, "id" | "leads" | "joined">;
@@ -20,6 +22,9 @@ interface AdminDataContextValue {
   addBusiness: (data: BusinessInput) => void;
   updateBusiness: (id: number, data: BusinessInput) => void;
   deleteBusiness: (id: number) => void;
+
+  users: User[];
+  toggleUserBlock: (id: number) => void;
 
   categories: Category[];
   addCategory: (data: CategoryInput) => void;
@@ -44,6 +49,7 @@ const today = () => new Date().toISOString().slice(0, 10);
 
 export function AdminDataProvider({ children }: { children: ReactNode }) {
   const [businesses, setBusinesses] = useState(initialBusinesses);
+  const [users, setUsers] = useState(initialUsers);
   const [categories, setCategories] = useState(initialCategories);
   const [locations, setLocations] = useState(initialLocations);
   const [adminUsers, setAdminUsers] = useState(initialAdminUsers);
@@ -58,6 +64,16 @@ export function AdminDataProvider({ children }: { children: ReactNode }) {
     updateBusiness: (id, data) =>
       setBusinesses((prev) => prev.map((b) => (b.id === id ? { ...b, ...data } : b))),
     deleteBusiness: (id) => setBusinesses((prev) => prev.filter((b) => b.id !== id)),
+
+    users,
+    toggleUserBlock: (id) =>
+      setUsers((prev) =>
+        prev.map((u) =>
+          u.id === id
+            ? { ...u, status: u.status === "Active" ? "Blocked" : "Active" }
+            : u
+        )
+      ),
 
     categories,
     addCategory: (data) =>

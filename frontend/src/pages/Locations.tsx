@@ -25,6 +25,7 @@ export default function Locations() {
       header: "Actions",
       render: (row) => (
         <div className="flex gap-2">
+          <ActionButton label="View" onClick={() => navigate(`/locations/${row.id}`)} />
           <ActionButton
             label="Edit"
             onClick={() => navigate(`/locations/${row.id}/edit`)}

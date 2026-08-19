@@ -41,6 +41,7 @@ export default function AdminUsers() {
       header: "Actions",
       render: (row) => (
         <div className="flex gap-2">
+          <ActionButton label="View" onClick={() => navigate(`/admin-users/${row.id}`)} />
           <ActionButton
             label="Edit"
             onClick={() => navigate(`/admin-users/${row.id}/edit`)}

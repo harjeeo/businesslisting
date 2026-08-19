@@ -31,6 +31,7 @@ export default function Categories() {
       header: "Actions",
       render: (row) => (
         <div className="flex gap-2">
+          <ActionButton label="View" onClick={() => navigate(`/categories/${row.id}`)} />
           <ActionButton
             label="Edit"
             onClick={() => navigate(`/categories/${row.id}/edit`)}

@@ -37,7 +37,7 @@ export default function Businesses() {
       header: "Actions",
       render: (row) => (
         <div className="flex gap-2">
-          <ActionButton label="View" />
+          <ActionButton label="View" onClick={() => navigate(`/businesses/${row.id}`)} />
           <ActionButton
             label="Edit"
             onClick={() => navigate(`/businesses/${row.id}/edit`)}
