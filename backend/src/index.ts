@@ -17,7 +17,7 @@ import {
   leads,
   rfqs,
   reviews,
-} from "./data/seed.js";
+} from "./data/repository.js";
 
 const app = express();
 

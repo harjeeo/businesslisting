@@ -1,0 +1,190 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Country {
+  India
+  Canada
+}
+
+enum BusinessStatus {
+  Verified
+  Pending
+  Suspended
+}
+
+enum UserRole {
+  Customer
+  BusinessOwner
+}
+
+enum UserStatus {
+  Active
+  Blocked
+}
+
+enum CategoryStatus {
+  Active
+  Inactive
+}
+
+enum AdminRole {
+  SuperAdmin
+  Admin
+  Moderator
+}
+
+enum AdminStatus {
+  Active
+  Inactive
+}
+
+enum ListingStatus {
+  Active
+  Pending
+  Rejected
+}
+
+enum LeadStatus {
+  New
+  Contacted
+  InDiscussion
+  QuotationSent
+  Won
+  Lost
+}
+
+enum RfqStatus {
+  Open
+  Quoted
+  Closed
+}
+
+enum ReviewStatus {
+  Pending
+  Approved
+  Rejected
+}
+
+model Business {
+  id       Int            @id @default(autoincrement())
+  name     String
+  category String
+  country  Country
+  city     String
+  status   BusinessStatus @default(Pending)
+  leads    Int            @default(0)
+  joined   DateTime       @default(now())
+
+  @@map("businesses")
+}
+
+model User {
+  id      Int        @id @default(autoincrement())
+  name    String
+  email   String     @unique
+  role    UserRole
+  country Country
+  status  UserStatus @default(Active)
+  joined  DateTime   @default(now())
+
+  @@map("users")
+}
+
+model Category {
+  id         Int            @id @default(autoincrement())
+  name       String
+  parent     String?
+  businesses Int            @default(0)
+  status     CategoryStatus @default(Active)
+
+  @@map("categories")
+}
+
+model Location {
+  id         Int            @id @default(autoincrement())
+  country    Country
+  state      String
+  city       String
+  businesses Int            @default(0)
+  status     CategoryStatus @default(Active)
+
+  @@map("locations")
+}
+
+model AdminUser {
+  id           Int         @id @default(autoincrement())
+  name         String
+  email        String      @unique
+  passwordHash String
+  role         AdminRole   @default(Admin)
+  status       AdminStatus @default(Active)
+  lastActive   DateTime    @default(now())
+
+  @@map("admin_users")
+}
+
+model Product {
+  id        Int           @id @default(autoincrement())
+  name      String
+  business  String
+  category  String
+  price     String
+  status    ListingStatus @default(Pending)
+  createdAt DateTime      @default(now())
+
+  @@map("products")
+}
+
+model Service {
+  id        Int           @id @default(autoincrement())
+  name      String
+  business  String
+  category  String
+  priceFrom String
+  status    ListingStatus @default(Pending)
+  createdAt DateTime      @default(now())
+
+  @@map("services")
+}
+
+model Lead {
+  id        Int        @id @default(autoincrement())
+  business  String
+  customer  String
+  interest  String
+  status    LeadStatus @default(New)
+  createdAt DateTime   @default(now())
+
+  @@map("leads")
+}
+
+model Rfq {
+  id        Int       @id @default(autoincrement())
+  product   String
+  customer  String
+  quantity  String
+  budget    String
+  quotes    Int       @default(0)
+  status    RfqStatus @default(Open)
+  createdAt DateTime  @default(now())
+
+  @@map("rfqs")
+}
+
+model Review {
+  id        Int          @id @default(autoincrement())
+  business  String
+  customer  String
+  rating    Int
+  comment   String
+  status    ReviewStatus @default(Pending)
+  createdAt DateTime     @default(now())
+
+  @@map("reviews")
+}
