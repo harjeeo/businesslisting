@@ -21,11 +21,18 @@ export default function LocationForm() {
     existing?.status ?? "Active"
   );
 
-  const handleSubmit = () => {
+  const [error, setError] = useState("");
+
+  const handleSubmit = async () => {
     const data = { country, state, city, status };
-    if (existing) updateLocation(existing.id, data);
-    else addLocation(data);
-    navigate("/locations");
+    setError("");
+    try {
+      if (existing) await updateLocation(existing.id, data);
+      else await addLocation(data);
+      navigate("/locations");
+    } catch {
+      setError("Could not save location. Please try again.");
+    }
   };
 
   return (
@@ -63,6 +70,11 @@ export default function LocationForm() {
         value={status}
         onChange={(e) => setStatus(e.target.value as LocationRow["status"])}
       />
+      {error && (
+        <div className="rounded-lg border border-red-200 bg-red-50 px-3.5 py-2.5 text-sm text-red-600">
+          {error}
+        </div>
+      )}
     </FormPageLayout>
   );
 }

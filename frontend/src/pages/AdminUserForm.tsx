@@ -14,16 +14,23 @@ export default function AdminUserForm() {
 
   const [name, setName] = useState(existing?.name ?? "");
   const [email, setEmail] = useState(existing?.email ?? "");
+  const [password, setPassword] = useState("");
   const [role, setRole] = useState<AdminUser["role"]>(existing?.role ?? "Admin");
   const [status, setStatus] = useState<AdminUser["status"]>(
     existing?.status ?? "Active"
   );
+  const [error, setError] = useState("");
 
-  const handleSubmit = () => {
-    const data = { name, email, role, status };
-    if (existing) updateAdminUser(existing.id, data);
-    else addAdminUser(data);
-    navigate("/admin-users");
+  const handleSubmit = async () => {
+    const data = { name, email, role, status, password: password || undefined };
+    setError("");
+    try {
+      if (existing) await updateAdminUser(existing.id, data);
+      else await addAdminUser(data);
+      navigate("/admin-users");
+    } catch {
+      setError("Could not save admin user. Please try again.");
+    }
   };
 
   return (
@@ -50,6 +57,14 @@ export default function AdminUserForm() {
         onChange={(e) => setEmail(e.target.value)}
         placeholder="e.g. neha@example.com"
       />
+      <TextField
+        label={isEdit ? "New Password (optional)" : "Temporary Password (optional)"}
+        type="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        placeholder={isEdit ? "Leave blank to keep current password" : "Defaults to password123 if left blank"}
+        hint={isEdit ? undefined : "The admin should change this after first login."}
+      />
       <SelectField
         label="Role"
         options={["Super Admin", "Admin", "Moderator"]}
@@ -62,6 +77,11 @@ export default function AdminUserForm() {
         value={status}
         onChange={(e) => setStatus(e.target.value as AdminUser["status"])}
       />
+      {error && (
+        <div className="rounded-lg border border-red-200 bg-red-50 px-3.5 py-2.5 text-sm text-red-600">
+          {error}
+        </div>
+      )}
     </FormPageLayout>
   );
 }

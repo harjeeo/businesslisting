@@ -1,5 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import AdminLayout from "./layouts/AdminLayout";
+import ProtectedRoute from "./components/ProtectedRoute";
+import { AdminDataProvider } from "./context/AdminDataContext";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Businesses from "./pages/Businesses";
@@ -31,7 +33,15 @@ function App() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
-      <Route element={<AdminLayout />}>
+      <Route
+        element={
+          <ProtectedRoute>
+            <AdminDataProvider>
+              <AdminLayout />
+            </AdminDataProvider>
+          </ProtectedRoute>
+        }
+      >
         <Route path="/" element={<Dashboard />} />
 
         <Route path="/businesses" element={<Businesses />} />

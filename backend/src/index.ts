@@ -6,12 +6,13 @@ import { env } from "./config/env.js";
 import { notFoundHandler, errorHandler } from "./middleware/errorHandler.js";
 import { createCrudRouter } from "./routes/crudRouter.js";
 import authRouter from "./routes/auth.js";
+import publicRouter from "./routes/public.js";
+import adminUsersRouter from "./routes/adminUsers.js";
 import {
   businesses,
   users,
   categories,
   locations,
-  adminUsers,
   products,
   services,
   leads,
@@ -22,7 +23,7 @@ import {
 const app = express();
 
 app.use(helmet());
-app.use(cors({ origin: env.corsOrigin }));
+app.use(cors({ origin: env.corsOrigins }));
 app.use(express.json());
 app.use(morgan(env.nodeEnv === "development" ? "dev" : "combined"));
 
@@ -31,11 +32,12 @@ app.get("/api/health", (_req, res) => {
 });
 
 app.use("/api/auth", authRouter);
+app.use("/api/public", publicRouter);
 app.use("/api/businesses", createCrudRouter(businesses));
 app.use("/api/users", createCrudRouter(users));
 app.use("/api/categories", createCrudRouter(categories));
 app.use("/api/locations", createCrudRouter(locations));
-app.use("/api/admin-users", createCrudRouter(adminUsers));
+app.use("/api/admin-users", adminUsersRouter);
 app.use("/api/products", createCrudRouter(products));
 app.use("/api/services", createCrudRouter(services));
 app.use("/api/leads", createCrudRouter(leads));

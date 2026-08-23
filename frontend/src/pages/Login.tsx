@@ -7,16 +7,29 @@ import {
   ViewIcon,
   ViewOffSlashIcon,
 } from "hugeicons-react";
+import { useAuth, ApiError } from "../context/AuthContext";
 
 export default function Login() {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    navigate("/");
+    setError("");
+    setSubmitting(true);
+    try {
+      await login(email, password);
+      navigate("/");
+    } catch (err) {
+      setError(err instanceof ApiError ? err.message : "Unable to sign in");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -39,6 +52,12 @@ export default function Login() {
           className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm"
         >
           <div className="space-y-4">
+            {error && (
+              <div className="rounded-lg border border-red-200 bg-red-50 px-3.5 py-2.5 text-sm text-red-600">
+                {error}
+              </div>
+            )}
+
             <label className="block">
               <span className="mb-1.5 block text-sm font-medium text-gray-700">
                 Email
@@ -106,9 +125,10 @@ export default function Login() {
 
             <button
               type="submit"
-              className="w-full rounded-lg bg-violet-600 py-2.5 text-sm font-medium text-white transition-colors hover:bg-violet-700"
+              disabled={submitting}
+              className="w-full rounded-lg bg-violet-600 py-2.5 text-sm font-medium text-white transition-colors hover:bg-violet-700 disabled:opacity-60"
             >
-              Sign In
+              {submitting ? "Signing in…" : "Sign In"}
             </button>
           </div>
         </form>

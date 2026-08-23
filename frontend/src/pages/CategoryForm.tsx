@@ -22,11 +22,18 @@ export default function CategoryForm() {
     existing?.status ?? "Active"
   );
 
-  const handleSubmit = () => {
+  const [error, setError] = useState("");
+
+  const handleSubmit = async () => {
     const data = { name, parent: parent === "None" ? null : parent, status };
-    if (existing) updateCategory(existing.id, data);
-    else addCategory(data);
-    navigate("/categories");
+    setError("");
+    try {
+      if (existing) await updateCategory(existing.id, data);
+      else await addCategory(data);
+      navigate("/categories");
+    } catch {
+      setError("Could not save category. Please try again.");
+    }
   };
 
   return (
@@ -58,6 +65,11 @@ export default function CategoryForm() {
         value={status}
         onChange={(e) => setStatus(e.target.value as Category["status"])}
       />
+      {error && (
+        <div className="rounded-lg border border-red-200 bg-red-50 px-3.5 py-2.5 text-sm text-red-600">
+          {error}
+        </div>
+      )}
     </FormPageLayout>
   );
 }

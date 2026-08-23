@@ -3,14 +3,14 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import './index.css'
 import App from './App.tsx'
-import { AdminDataProvider } from './context/AdminDataContext.tsx'
+import { AuthProvider } from './context/AuthContext.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
-      <AdminDataProvider>
+      <AuthProvider>
         <App />
-      </AdminDataProvider>
+      </AuthProvider>
     </BrowserRouter>
   </StrictMode>,
 )

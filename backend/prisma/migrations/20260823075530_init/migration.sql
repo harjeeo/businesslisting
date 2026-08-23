@@ -34,10 +34,29 @@ CREATE TYPE "ReviewStatus" AS ENUM ('Pending', 'Approved', 'Rejected');
 -- CreateTable
 CREATE TABLE "businesses" (
     "id" SERIAL NOT NULL,
+    "slug" TEXT NOT NULL,
     "name" TEXT NOT NULL,
+    "businessType" TEXT NOT NULL DEFAULT '',
     "category" TEXT NOT NULL,
+    "subCategory" TEXT NOT NULL DEFAULT '',
+    "description" TEXT NOT NULL DEFAULT '',
+    "establishedYear" TEXT NOT NULL DEFAULT '',
+    "employees" TEXT NOT NULL DEFAULT '',
     "country" "Country" NOT NULL,
+    "state" TEXT NOT NULL DEFAULT '',
     "city" TEXT NOT NULL,
+    "address" TEXT NOT NULL DEFAULT '',
+    "postalCode" TEXT NOT NULL DEFAULT '',
+    "lat" DOUBLE PRECISION NOT NULL DEFAULT 0,
+    "lng" DOUBLE PRECISION NOT NULL DEFAULT 0,
+    "phone" TEXT NOT NULL DEFAULT '',
+    "whatsapp" TEXT NOT NULL DEFAULT '',
+    "email" TEXT NOT NULL DEFAULT '',
+    "website" TEXT NOT NULL DEFAULT '',
+    "logoUrl" TEXT NOT NULL DEFAULT '',
+    "coverUrl" TEXT NOT NULL DEFAULT '',
+    "galleryUrls" TEXT[] DEFAULT ARRAY[]::TEXT[],
+    "videoUrl" TEXT NOT NULL DEFAULT '',
     "status" "BusinessStatus" NOT NULL DEFAULT 'Pending',
     "leads" INTEGER NOT NULL DEFAULT 0,
     "joined" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -158,6 +177,9 @@ CREATE TABLE "reviews" (
 
     CONSTRAINT "reviews_pkey" PRIMARY KEY ("id")
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "businesses_slug_key" ON "businesses"("slug");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");

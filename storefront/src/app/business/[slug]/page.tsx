@@ -17,10 +17,50 @@ import Footer from "@/components/Footer";
 import EnquiryForm from "@/components/business/EnquiryForm";
 import MapSection from "@/components/business/MapSection";
 import Gallery from "@/components/business/Gallery";
-import { businessDetails, getBusinessBySlug } from "@/data/dummy";
+import { getBusinessBySlug, type BusinessDetail } from "@/data/dummy";
+import { getPublicBusinessBySlug } from "@/lib/api";
 
-export function generateStaticParams() {
-  return businessDetails.map((b) => ({ slug: b.slug }));
+// Live data comes from the database (name, address, contact, media, etc.).
+// Presentational extras the schema doesn't model yet (rating, product/
+// service lists, gallery captions, reviews, FAQs, hours) fall back to the
+// matching demo record when one exists, or sensible empty defaults.
+async function loadBusiness(slug: string): Promise<BusinessDetail | null> {
+  const live = await getPublicBusinessBySlug(slug);
+  const demo = getBusinessBySlug(slug);
+
+  if (!live) return demo ?? null;
+
+  return {
+    slug: live.slug,
+    name: live.name,
+    category: live.category,
+    subCategory: live.subCategory,
+    city: live.city,
+    state: live.state,
+    country: live.country,
+    address: live.address,
+    postalCode: live.postalCode,
+    lat: live.lat || demo?.lat || 28.6139,
+    lng: live.lng || demo?.lng || 77.209,
+    logo: demo?.logo ?? "🏢",
+    rating: demo?.rating ?? 0,
+    reviewCount: demo?.reviewCount ?? 0,
+    verified: live.status === "Verified",
+    description: live.description,
+    businessType: live.businessType,
+    establishedYear: live.establishedYear,
+    employees: live.employees,
+    phone: live.phone,
+    whatsapp: live.whatsapp,
+    email: live.email,
+    website: live.website,
+    hours: demo?.hours ?? "Contact business for hours",
+    products: demo?.products ?? [],
+    services: demo?.services ?? [],
+    gallery: demo?.gallery ?? [],
+    reviewsList: demo?.reviewsList ?? [],
+    faqs: demo?.faqs ?? [],
+  };
 }
 
 export default async function BusinessPage({
@@ -29,7 +69,7 @@ export default async function BusinessPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const business = getBusinessBySlug(slug);
+  const business = await loadBusiness(slug);
 
   if (!business) notFound();
 
@@ -64,11 +104,13 @@ export default async function BusinessPage({
                 <p className="text-sm text-gray-500">
                   {business.category} · {business.subCategory}
                 </p>
-                <div className="mt-1 flex items-center gap-1 text-sm">
-                  <StarIcon size={15} className="fill-yellow-400 text-yellow-400" />
-                  <span className="font-medium text-gray-700">{business.rating}</span>
-                  <span className="text-gray-400">({business.reviewCount} reviews)</span>
-                </div>
+                {business.rating > 0 && (
+                  <div className="mt-1 flex items-center gap-1 text-sm">
+                    <StarIcon size={15} className="fill-yellow-400 text-yellow-400" />
+                    <span className="font-medium text-gray-700">{business.rating}</span>
+                    <span className="text-gray-400">({business.reviewCount} reviews)</span>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -158,53 +200,59 @@ export default async function BusinessPage({
               </section>
             )}
 
-            <section className="rounded-xl border border-gray-200 bg-white p-6">
-              <h2 className="text-base font-semibold text-gray-900">Gallery</h2>
-              <p className="mt-1 text-sm text-gray-500">Photos and videos</p>
-              <div className="mt-4">
-                <Gallery items={business.gallery} />
-              </div>
-            </section>
+            {business.gallery.length > 0 && (
+              <section className="rounded-xl border border-gray-200 bg-white p-6">
+                <h2 className="text-base font-semibold text-gray-900">Gallery</h2>
+                <p className="mt-1 text-sm text-gray-500">Photos and videos</p>
+                <div className="mt-4">
+                  <Gallery items={business.gallery} />
+                </div>
+              </section>
+            )}
 
-            <section className="rounded-xl border border-gray-200 bg-white p-6">
-              <h2 className="text-base font-semibold text-gray-900">
-                Reviews &amp; Ratings
-              </h2>
-              <div className="mt-4 space-y-4">
-                {business.reviewsList.map((r) => (
-                  <div key={r.name} className="border-b border-gray-50 pb-4 last:border-0">
-                    <div className="flex items-center justify-between">
-                      <p className="text-sm font-medium text-gray-900">{r.name}</p>
-                      <span className="text-xs text-gray-400">{r.date}</span>
+            {business.reviewsList.length > 0 && (
+              <section className="rounded-xl border border-gray-200 bg-white p-6">
+                <h2 className="text-base font-semibold text-gray-900">
+                  Reviews &amp; Ratings
+                </h2>
+                <div className="mt-4 space-y-4">
+                  {business.reviewsList.map((r) => (
+                    <div key={r.name} className="border-b border-gray-50 pb-4 last:border-0">
+                      <div className="flex items-center justify-between">
+                        <p className="text-sm font-medium text-gray-900">{r.name}</p>
+                        <span className="text-xs text-gray-400">{r.date}</span>
+                      </div>
+                      <div className="mt-1 flex items-center gap-0.5">
+                        {Array.from({ length: 5 }).map((_, i) => (
+                          <StarIcon
+                            key={i}
+                            size={13}
+                            className={
+                              i < r.rating ? "fill-yellow-400 text-yellow-400" : "text-gray-200"
+                            }
+                          />
+                        ))}
+                      </div>
+                      <p className="mt-1.5 text-sm text-gray-600">{r.comment}</p>
                     </div>
-                    <div className="mt-1 flex items-center gap-0.5">
-                      {Array.from({ length: 5 }).map((_, i) => (
-                        <StarIcon
-                          key={i}
-                          size={13}
-                          className={
-                            i < r.rating ? "fill-yellow-400 text-yellow-400" : "text-gray-200"
-                          }
-                        />
-                      ))}
-                    </div>
-                    <p className="mt-1.5 text-sm text-gray-600">{r.comment}</p>
-                  </div>
-                ))}
-              </div>
-            </section>
+                  ))}
+                </div>
+              </section>
+            )}
 
-            <section className="rounded-xl border border-gray-200 bg-white p-6">
-              <h2 className="text-base font-semibold text-gray-900">FAQs</h2>
-              <div className="mt-4 space-y-4">
-                {business.faqs.map((f) => (
-                  <div key={f.question}>
-                    <p className="text-sm font-medium text-gray-800">{f.question}</p>
-                    <p className="mt-1 text-sm text-gray-500">{f.answer}</p>
-                  </div>
-                ))}
-              </div>
-            </section>
+            {business.faqs.length > 0 && (
+              <section className="rounded-xl border border-gray-200 bg-white p-6">
+                <h2 className="text-base font-semibold text-gray-900">FAQs</h2>
+                <div className="mt-4 space-y-4">
+                  {business.faqs.map((f) => (
+                    <div key={f.question}>
+                      <p className="text-sm font-medium text-gray-800">{f.question}</p>
+                      <p className="mt-1 text-sm text-gray-500">{f.answer}</p>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
 
             <div id="enquiry">
               <EnquiryForm businessName={business.name} />

@@ -56,7 +56,10 @@ export default function BusinessForm() {
 
   const [status, setStatus] = useState<Business["status"]>(existing?.status ?? "Pending");
 
-  const handleSubmit = () => {
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleSubmit = async () => {
     const data = {
       name,
       businessType,
@@ -82,9 +85,17 @@ export default function BusinessForm() {
       videoUrl,
       status,
     };
-    if (existing) updateBusiness(existing.id, data);
-    else addBusiness(data);
-    navigate("/businesses");
+    setError("");
+    setSubmitting(true);
+    try {
+      if (existing) await updateBusiness(existing.id, data);
+      else await addBusiness(data);
+      navigate("/businesses");
+    } catch {
+      setError("Could not save business. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -161,6 +172,12 @@ export default function BusinessForm() {
           <SelectField label="Status" options={["Pending", "Verified", "Suspended"]} value={status} onChange={(e) => setStatus(e.target.value as Business["status"])} />
         </FormSection>
 
+        {error && (
+          <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-2.5 text-sm text-red-600">
+            {error}
+          </div>
+        )}
+
         <div className="flex justify-end gap-3">
           <button
             type="button"
@@ -172,9 +189,10 @@ export default function BusinessForm() {
           <button
             type="button"
             onClick={handleSubmit}
-            className="rounded-lg bg-violet-600 px-4 py-2 text-sm font-medium text-white hover:bg-violet-700"
+            disabled={submitting}
+            className="rounded-lg bg-violet-600 px-4 py-2 text-sm font-medium text-white hover:bg-violet-700 disabled:opacity-60"
           >
-            {isEdit ? "Save Changes" : "Add Business"}
+            {submitting ? "Saving…" : isEdit ? "Save Changes" : "Add Business"}
           </button>
         </div>
       </div>

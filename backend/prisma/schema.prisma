@@ -72,14 +72,33 @@ enum ReviewStatus {
 }
 
 model Business {
-  id       Int            @id @default(autoincrement())
-  name     String
-  category String
-  country  Country
-  city     String
-  status   BusinessStatus @default(Pending)
-  leads    Int            @default(0)
-  joined   DateTime       @default(now())
+  id              Int            @id @default(autoincrement())
+  slug            String         @unique
+  name            String
+  businessType    String         @default("")
+  category        String
+  subCategory     String         @default("")
+  description     String         @default("")
+  establishedYear String         @default("")
+  employees       String         @default("")
+  country         Country
+  state           String         @default("")
+  city            String
+  address         String         @default("")
+  postalCode      String         @default("")
+  lat             Float          @default(0)
+  lng             Float          @default(0)
+  phone           String         @default("")
+  whatsapp        String         @default("")
+  email           String         @default("")
+  website         String         @default("")
+  logoUrl         String         @default("")
+  coverUrl        String         @default("")
+  galleryUrls     String[]       @default([])
+  videoUrl        String         @default("")
+  status          BusinessStatus @default(Pending)
+  leads           Int            @default(0)
+  joined          DateTime       @default(now())
 
   @@map("businesses")
 }

@@ -1,8 +1,12 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { Logout01Icon, Store01Icon } from "hugeicons-react";
 import { navItems } from "../config/navigation";
+import { useAuth } from "../context/AuthContext";
 
 export default function Sidebar() {
+  const navigate = useNavigate();
+  const { logout } = useAuth();
+
   return (
     <aside className="flex h-screen w-64 shrink-0 flex-col border-r border-gray-200 bg-white">
       <div className="flex h-16 items-center gap-2 border-b border-gray-200 px-5">
@@ -37,6 +41,10 @@ export default function Sidebar() {
       <div className="border-t border-gray-200 p-3">
         <button
           type="button"
+          onClick={() => {
+            logout();
+            navigate("/login");
+          }}
           className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-gray-600 transition-colors hover:bg-red-50 hover:text-red-600"
         >
           <Logout01Icon size={20} />
