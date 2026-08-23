@@ -6,11 +6,13 @@ export function SingleImageUpload({
   value,
   onChange,
   aspect = "aspect-video",
+  size = "w-full max-w-xs",
 }: {
   label: string;
   value: string;
   onChange: (url: string) => void;
   aspect?: string;
+  size?: string;
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -23,7 +25,7 @@ export function SingleImageUpload({
     <div>
       <span className="mb-1.5 block text-sm font-medium text-gray-700">{label}</span>
       <div
-        className={`relative flex ${aspect} w-full max-w-xs items-center justify-center overflow-hidden rounded-lg border border-dashed border-gray-300 bg-gray-50`}
+        className={`relative flex ${aspect} ${size} items-center justify-center overflow-hidden rounded-lg border border-dashed border-gray-300 bg-gray-50`}
       >
         {value ? (
           <>
@@ -41,7 +43,7 @@ export function SingleImageUpload({
           <button
             type="button"
             onClick={() => inputRef.current?.click()}
-            className="flex flex-col items-center gap-2 text-xs text-gray-400 hover:text-violet-600"
+            className="flex flex-col items-center gap-2 px-2 text-center text-xs text-gray-400 hover:text-violet-600"
           >
             <ImageUpload01Icon size={22} />
             Upload {label}

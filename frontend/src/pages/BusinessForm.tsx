@@ -160,10 +160,20 @@ export default function BusinessForm() {
         </FormSection>
 
         <FormSection title="Media" description="Logo, cover image, gallery photos and a video">
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-            <SingleImageUpload label="Logo" value={logoUrl} onChange={setLogoUrl} aspect="aspect-square" />
-            <SingleImageUpload label="Cover Image" value={coverUrl} onChange={setCoverUrl} aspect="aspect-video" />
-          </div>
+          <SingleImageUpload
+            label="Cover Image"
+            value={coverUrl}
+            onChange={setCoverUrl}
+            aspect="aspect-[3/1]"
+            size="w-full"
+          />
+          <SingleImageUpload
+            label="Logo"
+            value={logoUrl}
+            onChange={setLogoUrl}
+            aspect="aspect-square"
+            size="w-32"
+          />
           <GalleryUpload label="Gallery Images" values={galleryUrls} onChange={setGalleryUrls} />
           <VideoField label="Business Video" value={videoUrl} onChange={setVideoUrl} />
         </FormSection>
