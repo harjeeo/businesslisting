@@ -73,6 +73,42 @@ export interface BusinessFaq {
   answer: string;
 }
 
+export type GalleryItem =
+  | { type: "image"; src: string; thumb: string; caption: string }
+  | { type: "video"; src: string; thumb: string; caption: string };
+
+const SAMPLE_VIDEO_URL =
+  "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4";
+
+function demoGallery(seed: string, captions: [string, string, string, string]): GalleryItem[] {
+  return [
+    {
+      type: "image",
+      src: `https://picsum.photos/seed/${seed}-1/1000/700`,
+      thumb: `https://picsum.photos/seed/${seed}-1/300/300`,
+      caption: captions[0],
+    },
+    {
+      type: "image",
+      src: `https://picsum.photos/seed/${seed}-2/1000/700`,
+      thumb: `https://picsum.photos/seed/${seed}-2/300/300`,
+      caption: captions[1],
+    },
+    {
+      type: "video",
+      src: SAMPLE_VIDEO_URL,
+      thumb: `https://picsum.photos/seed/${seed}-3/300/300`,
+      caption: captions[2],
+    },
+    {
+      type: "image",
+      src: `https://picsum.photos/seed/${seed}-4/1000/700`,
+      thumb: `https://picsum.photos/seed/${seed}-4/300/300`,
+      caption: captions[3],
+    },
+  ];
+}
+
 export interface BusinessDetail {
   slug: string;
   name: string;
@@ -100,7 +136,7 @@ export interface BusinessDetail {
   hours: string;
   products: BusinessProduct[];
   services: string[];
-  gallery: string[];
+  gallery: GalleryItem[];
   reviewsList: BusinessReview[];
   faqs: BusinessFaq[];
 }
@@ -138,7 +174,12 @@ export const businessDetails: BusinessDetail[] = [
       { name: "Smart Doorbell", price: "₹2,199", image: "🔔" },
     ],
     services: ["CCTV Installation", "Home Wiring", "Warranty Support"],
-    gallery: ["🏬", "💡", "📹", "🔧"],
+    gallery: demoGallery("sharma-electronics", [
+      "Storefront",
+      "LED lighting display",
+      "Store walkthrough",
+      "CCTV installation",
+    ]),
     reviewsList: [
       { name: "Rahul Verma", rating: 5, date: "2026-07-01", comment: "Great service and fast delivery." },
       { name: "Simran Kaur", rating: 4, date: "2026-06-12", comment: "Good pricing, installation was quick." },
@@ -176,7 +217,12 @@ export const businessDetails: BusinessDetail[] = [
     hours: "Mon–Fri, 9:00 AM – 6:00 PM",
     products: [],
     services: ["Website Design & Development", "E-commerce Setup", "SEO Optimization"],
-    gallery: ["💻", "🖥️", "🎨"],
+    gallery: demoGallery("maple-web-studio", [
+      "Studio workspace",
+      "Design review",
+      "Team walkthrough",
+      "Client project",
+    ]),
     reviewsList: [
       { name: "Emily Johnson", rating: 5, date: "2026-06-18", comment: "Brought in genuine leads from week one." },
     ],
@@ -215,7 +261,12 @@ export const businessDetails: BusinessDetail[] = [
       { name: "Bubble Wrap Roll", price: "₹350", image: "🎁" },
     ],
     services: ["Bulk Custom Packaging", "Design Consultation"],
-    gallery: ["🏭", "📦", "🚚"],
+    gallery: demoGallery("delhi-packaging", [
+      "Factory floor",
+      "Packaging materials",
+      "Production line",
+      "Warehouse dispatch",
+    ]),
     reviewsList: [
       { name: "Amit Sharma", rating: 4, date: "2026-08-17", comment: "Reliable for bulk orders." },
     ],
@@ -254,7 +305,12 @@ export const businessDetails: BusinessDetail[] = [
       { name: "Assorted Spice Box", price: "CAD 14.99", image: "🌶️" },
     ],
     services: ["Home Delivery", "Bulk Ordering"],
-    gallery: ["🛒", "🍚", "🥭"],
+    gallery: demoGallery("brampton-grocers", [
+      "Store aisle",
+      "Fresh produce",
+      "Store tour",
+      "Spice section",
+    ]),
     reviewsList: [
       { name: "Michael Lee", rating: 5, date: "2026-05-25", comment: "Best grocery store in the area!" },
     ],
@@ -290,7 +346,12 @@ export const businessDetails: BusinessDetail[] = [
     hours: "Mon–Sat, 10:00 AM – 7:00 PM",
     products: [{ name: "Modular Kitchen Cabinet", price: "On Request", image: "🍽️" }],
     services: ["Home Interior Consultation", "Modular Furniture", "Space Planning"],
-    gallery: ["🛋️", "🏠", "🎨"],
+    gallery: demoGallery("singh-interiors", [
+      "Living room design",
+      "Modular kitchen",
+      "Studio walkthrough",
+      "Completed project",
+    ]),
     reviewsList: [
       { name: "Neha Gupta", rating: 4, date: "2026-04-30", comment: "Great design ideas for small spaces." },
     ],
@@ -326,7 +387,12 @@ export const businessDetails: BusinessDetail[] = [
     hours: "Mon–Fri, 9:00 AM – 5:00 PM",
     products: [],
     services: ["Immigration Document Filing", "Business Incorporation", "Legal Consultation"],
-    gallery: ["⚖️", "🏢", "📄"],
+    gallery: demoGallery("toronto-legal-group", [
+      "Office reception",
+      "Meeting room",
+      "Firm introduction",
+      "Downtown office",
+    ]),
     reviewsList: [
       { name: "Priya Kaur", rating: 5, date: "2026-08-14", comment: "Handled our PR application smoothly." },
     ],

@@ -16,6 +16,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import EnquiryForm from "@/components/business/EnquiryForm";
 import MapSection from "@/components/business/MapSection";
+import Gallery from "@/components/business/Gallery";
 import { businessDetails, getBusinessBySlug } from "@/data/dummy";
 
 export function generateStaticParams() {
@@ -159,15 +160,9 @@ export default async function BusinessPage({
 
             <section className="rounded-xl border border-gray-200 bg-white p-6">
               <h2 className="text-base font-semibold text-gray-900">Gallery</h2>
-              <div className="mt-4 flex flex-wrap gap-3">
-                {business.gallery.map((g, i) => (
-                  <div
-                    key={i}
-                    className="flex h-24 w-24 items-center justify-center rounded-lg bg-violet-50 text-4xl"
-                  >
-                    {g}
-                  </div>
-                ))}
+              <p className="mt-1 text-sm text-gray-500">Photos and videos</p>
+              <div className="mt-4">
+                <Gallery items={business.gallery} />
               </div>
             </section>
 
