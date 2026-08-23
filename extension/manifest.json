@@ -1,0 +1,40 @@
+{
+  "manifest_version": 3,
+  "name": "GMB Listing Capture",
+  "version": "1.1.0",
+  "description": "Google Maps par jo bhi business listing open karo, uska Name, Address, Phone apne aap capture ho kar list mein jud jaata hai. Ek naye tab mein poori list dekho, CSV mein export karo, ya seedha apne Business Listing Marketplace platform ko bhej do.",
+  "permissions": ["storage", "downloads"],
+  "host_permissions": [
+    "https://www.google.com/maps/*",
+    "https://maps.google.com/*",
+    "http://localhost:4000/*",
+    "http://localhost/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "GMB Listing Capture",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.google.com/maps/*",
+        "https://maps.google.com/*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}

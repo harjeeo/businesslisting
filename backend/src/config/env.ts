@@ -7,4 +7,5 @@ export const env = {
     .split(",")
     .map((o) => o.trim()),
   nodeEnv: process.env.NODE_ENV ?? "development",
+  importApiKey: process.env.IMPORT_API_KEY ?? "",
 };

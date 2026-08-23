@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Captured Listings — GMB Listing Capture</title>
+  <link rel="stylesheet" href="list.css" />
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <div class="brand">
+        <div class="pin">📍</div>
+        <div>
+          <h1>Captured Listings</h1>
+          <p class="subtitle" id="subtitle">0 listings</p>
+        </div>
+      </div>
+      <div class="topbar-actions">
+        <input
+          id="search"
+          type="text"
+          placeholder="Naam ya address se search karo..."
+        />
+        <button id="sendToPlatform" class="btn primary">☁️ Platform ko bhejo</button>
+        <button id="exportCsv" class="btn secondary">CSV export karo</button>
+        <button id="openSettings" class="btn secondary">⚙️ Settings</button>
+        <button id="clearAll" class="btn danger">Sab clear karo</button>
+      </div>
+    </header>
+
+    <main>
+      <div id="emptyState" class="empty-state" hidden>
+        <div class="empty-icon">📭</div>
+        <h2>Abhi tak koi listing capture nahi hui</h2>
+        <p>
+          Google Maps par jaakar koi bhi business listing open karo — screen
+          ke niche-right corner mein ek "List mein Save Karo" button dikhega,
+          usko click karo aur listing yahan aa jayegi.
+        </p>
+      </div>
+
+      <div id="tableWrap" class="table-wrap" hidden>
+        <table>
+          <thead>
+            <tr>
+              <th>Shop Name</th>
+              <th>Address</th>
+              <th>Phone</th>
+              <th>Website</th>
+              <th>Timing</th>
+              <th>Email</th>
+              <th>Images</th>
+              <th>Category</th>
+              <th>Rating</th>
+              <th>Captured At</th>
+              <th>Platform</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+
+      <div class="load-more-wrap">
+        <button id="loadMore" class="btn secondary" hidden>
+          Load more (<span id="remainingCount">0</span> baaki)
+        </button>
+      </div>
+    </main>
+  </div>
+
+  <div id="settingsModal" class="modal-overlay" hidden>
+    <div class="modal">
+      <h2>Platform Connection Settings</h2>
+      <p class="modal-hint">
+        Ye extension aapke Business Listing Marketplace ke Super Admin
+        backend se connect hoga. Backend chalane wale se
+        <strong>Platform API URL</strong> aur <strong>Import API Key</strong>
+        le lo (backend ke <code>.env</code> file mein <code>IMPORT_API_KEY</code>).
+      </p>
+      <label>
+        Platform API URL
+        <input
+          id="settingsApiUrl"
+          type="text"
+          placeholder="http://localhost:4000/api"
+        />
+      </label>
+      <label>
+        Import API Key
+        <input id="settingsApiKey" type="text" placeholder="Paste API key" />
+      </label>
+      <div class="modal-actions">
+        <button id="settingsCancel" class="btn secondary">Cancel</button>
+        <button id="settingsSave" class="btn primary">Save Karo</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="csv-utils.js"></script>
+  <script src="platform-sync.js"></script>
+  <script src="list.js"></script>
+</body>
+</html>

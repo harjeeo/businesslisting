@@ -8,6 +8,7 @@ import { createCrudRouter } from "./routes/crudRouter.js";
 import authRouter from "./routes/auth.js";
 import publicRouter from "./routes/public.js";
 import adminUsersRouter from "./routes/adminUsers.js";
+import importRouter from "./routes/import.js";
 import {
   businesses,
   users,
@@ -23,7 +24,24 @@ import {
 const app = express();
 
 app.use(helmet());
-app.use(cors({ origin: env.corsOrigins }));
+app.use(
+  cors({
+    origin(origin, callback) {
+      // No Origin header (server-to-server, curl) or an allow-listed web
+      // origin: fine. Chrome extension pages send "chrome-extension://<id>"
+      // as Origin — allowed too, since /api/import is protected by its own
+      // API key rather than relying on CORS as a security boundary.
+      if (
+        !origin ||
+        env.corsOrigins.includes(origin) ||
+        origin.startsWith("chrome-extension://")
+      ) {
+        return callback(null, true);
+      }
+      callback(new Error("Not allowed by CORS"));
+    },
+  })
+);
 app.use(express.json());
 app.use(morgan(env.nodeEnv === "development" ? "dev" : "combined"));
 
@@ -38,6 +56,7 @@ app.use("/api/users", createCrudRouter(users));
 app.use("/api/categories", createCrudRouter(categories));
 app.use("/api/locations", createCrudRouter(locations));
 app.use("/api/admin-users", adminUsersRouter);
+app.use("/api/import", importRouter);
 app.use("/api/products", createCrudRouter(products));
 app.use("/api/services", createCrudRouter(services));
 app.use("/api/leads", createCrudRouter(leads));

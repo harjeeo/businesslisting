@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8" />
+  <title>GMB Listing Capture</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="pin">📍</div>
+      <div class="title-block">
+        <h1>GMB Listing Capture</h1>
+        <p class="subtitle">Google Maps listings, auto-saved</p>
+      </div>
+    </header>
+
+    <div class="count-card">
+      <span class="count" id="count">0</span>
+      <span class="count-label">listings capture ho chuki hain</span>
+    </div>
+
+    <div class="actions">
+      <button id="openList" class="btn primary">Poori list dekho</button>
+      <button id="exportCsv" class="btn secondary">CSV export karo</button>
+      <button id="clearAll" class="btn danger">Sab clear karo</button>
+    </div>
+
+    <p class="hint">
+      Google Maps par kisi bhi listing ko open karo — niche-right corner mein
+      "List mein Save Karo" button dikhega, usko click karo tabhi save hoga.
+    </p>
+  </div>
+  <script src="csv-utils.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
