@@ -233,16 +233,6 @@ export default async function BusinessPage({
                   <span>{business.hours}</span>
                 </div>
                 <div className="flex items-center gap-2.5 text-gray-600">
-                  <CallIcon size={16} className="shrink-0 text-gray-400" />
-                  <a href={`tel:${business.phone}`} className="hover:text-violet-600">
-                    {business.phone}
-                  </a>
-                </div>
-                <div className="flex items-center gap-2.5 text-gray-600">
-                  <WhatsappIcon size={16} className="shrink-0 text-gray-400" />
-                  <span>{business.whatsapp}</span>
-                </div>
-                <div className="flex items-center gap-2.5 text-gray-600">
                   <MailAtSign01Icon size={16} className="shrink-0 text-gray-400" />
                   <a href={`mailto:${business.email}`} className="hover:text-violet-600">
                     {business.email}
