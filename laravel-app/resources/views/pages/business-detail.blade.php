@@ -1,8 +1,12 @@
 <x-layout :title="$business->name" :description="$business->description">
     {{-- Cover + logo --}}
-    <div class="relative h-48 w-full bg-gray-100 sm:h-64">
+    <div class="relative h-48 w-full sm:h-64">
         @if ($business->cover_url)
             <img src="{{ $business->cover_url }}" alt="{{ $business->name }} cover" class="h-full w-full object-cover">
+        @else
+            <div class="flex h-full w-full items-center justify-center bg-gradient-to-br from-violet-100 via-violet-50 to-white">
+                <x-icon name="building" class="size-16 text-violet-200" />
+            </div>
         @endif
     </div>
 
