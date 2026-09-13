@@ -39,13 +39,13 @@ Google Sheets mein directly import kiya ja sakta hai.
 ## Platform se connect kaise kare
 
 1. Backend chalane wale se (ya khud, agar aapne hi backend deploy kiya hai)
-   `backend/.env` file mein `IMPORT_API_KEY` set karwao/karo — koi bhi
+   `laravel-app/.env` file mein `IMPORT_API_KEY` set karwao/karo — koi bhi
    random secret string. `.env.example` mein iska format hai.
 2. Backend restart karo taaki naya key load ho.
 3. List page par **⚙️ Settings** button dabao aur do cheezein bharo:
    - **Platform API URL** — backend ka address + `/api`, jaise
-     `http://localhost:4000/api` (local dev) ya production URL
-     `https://yourdomain.com/api`.
+     `http://localhost:8000/api` (local dev, `php artisan serve`) ya
+     production URL `https://yourdomain.com/api`.
    - **Import API Key** — wahi key jo `.env` mein `IMPORT_API_KEY` set
      ki thi.
 4. **Save Karo** dabao.
