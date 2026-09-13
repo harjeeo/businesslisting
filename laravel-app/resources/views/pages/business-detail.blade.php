@@ -283,6 +283,12 @@
         <button type="button" id="lightbox-close" class="absolute right-4 top-4 text-white">
             <x-icon name="close" class="size-7" />
         </button>
+        <button type="button" id="lightbox-prev" class="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-2 text-white hover:bg-white/20 sm:left-4">
+            <x-icon name="arrow-left" class="size-7" />
+        </button>
+        <button type="button" id="lightbox-next" class="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-2 text-white hover:bg-white/20 sm:right-4">
+            <x-icon name="arrow-right" class="size-7" />
+        </button>
         <div id="lightbox-content" class="max-h-full max-w-3xl w-full"></div>
     </div>
 
@@ -309,56 +315,86 @@
             var lightbox = document.getElementById('lightbox');
             var content = document.getElementById('lightbox-content');
             var closeBtn = document.getElementById('lightbox-close');
+            var prevBtn = document.getElementById('lightbox-prev');
+            var nextBtn = document.getElementById('lightbox-next');
 
-            document.querySelectorAll('[data-gallery-trigger]').forEach(function (btn) {
-                btn.addEventListener('click', function () {
-                    var type = btn.dataset.type;
-                    var src = btn.dataset.src;
-                    content.innerHTML = '';
+            var triggers = Array.prototype.slice.call(document.querySelectorAll('[data-gallery-trigger]'));
+            var currentIndex = -1;
 
-                    if (type === 'video') {
-                        if (src.includes('youtube.com') || src.includes('youtu.be')) {
-                            var id = src.includes('youtu.be')
-                                ? src.split('/').pop()
-                                : new URL(src).searchParams.get('v');
-                            var iframe = document.createElement('iframe');
-                            iframe.src = 'https://www.youtube.com/embed/' + id + '?autoplay=1';
-                            iframe.className = 'aspect-video w-full rounded-lg';
-                            iframe.allow = 'autoplay; encrypted-media';
-                            iframe.allowFullscreen = true;
-                            content.appendChild(iframe);
-                        } else {
-                            var video = document.createElement('video');
-                            video.src = src;
-                            video.controls = true;
-                            video.autoplay = true;
-                            video.className = 'max-h-[80vh] w-full rounded-lg';
-                            content.appendChild(video);
-                        }
+            function renderSlide(index) {
+                var btn = triggers[index];
+                var type = btn.dataset.type;
+                var src = btn.dataset.src;
+                content.innerHTML = '';
+
+                if (type === 'video') {
+                    if (src.includes('youtube.com') || src.includes('youtu.be')) {
+                        var id = src.includes('youtu.be')
+                            ? src.split('/').pop()
+                            : new URL(src).searchParams.get('v');
+                        var iframe = document.createElement('iframe');
+                        iframe.src = 'https://www.youtube.com/embed/' + id + '?autoplay=1';
+                        iframe.className = 'aspect-video w-full rounded-lg';
+                        iframe.allow = 'autoplay; encrypted-media';
+                        iframe.allowFullscreen = true;
+                        content.appendChild(iframe);
                     } else {
-                        var img = document.createElement('img');
-                        img.src = src;
-                        img.className = 'max-h-[80vh] w-full rounded-lg object-contain';
-                        content.appendChild(img);
+                        var video = document.createElement('video');
+                        video.src = src;
+                        video.controls = true;
+                        video.autoplay = true;
+                        video.className = 'max-h-[80vh] w-full rounded-lg';
+                        content.appendChild(video);
                     }
+                } else {
+                    var img = document.createElement('img');
+                    img.src = src;
+                    img.className = 'max-h-[80vh] w-full rounded-lg object-contain';
+                    content.appendChild(img);
+                }
+            }
 
-                    lightbox.classList.remove('hidden');
-                    lightbox.classList.add('flex');
-                });
-            });
+            function openLightbox(index) {
+                currentIndex = index;
+                renderSlide(currentIndex);
+                var multiple = triggers.length > 1;
+                prevBtn.classList.toggle('hidden', !multiple);
+                nextBtn.classList.toggle('hidden', !multiple);
+                lightbox.classList.remove('hidden');
+                lightbox.classList.add('flex');
+            }
+
+            function showRelative(delta) {
+                if (!triggers.length) return;
+                currentIndex = (currentIndex + delta + triggers.length) % triggers.length;
+                renderSlide(currentIndex);
+            }
 
             function closeLightbox() {
                 lightbox.classList.add('hidden');
                 lightbox.classList.remove('flex');
                 content.innerHTML = '';
+                currentIndex = -1;
             }
+
+            triggers.forEach(function (btn, index) {
+                btn.addEventListener('click', function () {
+                    openLightbox(index);
+                });
+            });
+
+            prevBtn.addEventListener('click', function () { showRelative(-1); });
+            nextBtn.addEventListener('click', function () { showRelative(1); });
 
             closeBtn.addEventListener('click', closeLightbox);
             lightbox.addEventListener('click', function (e) {
                 if (e.target === lightbox) closeLightbox();
             });
             document.addEventListener('keydown', function (e) {
+                if (currentIndex === -1) return;
                 if (e.key === 'Escape') closeLightbox();
+                if (e.key === 'ArrowLeft') showRelative(-1);
+                if (e.key === 'ArrowRight') showRelative(1);
             });
         });
     </script>
