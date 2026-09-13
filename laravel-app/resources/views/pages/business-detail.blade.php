@@ -1,45 +1,83 @@
 <x-layout :title="$business->name" :description="$business->description">
-    {{-- Cover + logo --}}
-    <div class="relative h-48 w-full sm:h-64">
-        @if ($business->cover_url)
-            <img src="{{ $business->cover_url }}" alt="{{ $business->name }} cover" class="h-full w-full object-cover">
-        @else
-            <div class="flex h-full w-full items-center justify-center bg-gradient-to-br from-violet-100 via-violet-50 to-white">
-                <x-icon name="building" class="size-16 text-violet-200" />
-            </div>
-        @endif
-    </div>
+    @php
+        $heroImages = collect([$business->cover_url, $business->logo_url])
+            ->merge($business->gallery_urls ?? [])
+            ->filter()
+            ->unique()
+            ->values();
+        $heroMain = $heroImages->first();
+        $heroThumbs = $heroImages->slice(1, 3);
+        $heroExtra = $heroImages->count() - 1 - $heroThumbs->count();
+    @endphp
 
-    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div class="-mt-12 flex items-end gap-4 sm:-mt-16">
-            <div class="flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-2xl border-4 border-white bg-white shadow-md sm:h-32 sm:w-32">
+    <div class="mx-auto max-w-7xl px-4 pt-8 sm:px-6 lg:px-8">
+        {{-- Header --}}
+        <div class="flex flex-wrap items-center gap-2">
+            <h1 class="text-xl font-bold text-gray-900 sm:text-2xl">{{ $business->name }}</h1>
+            @if ($business->status === 'Verified')
+                <span class="flex items-center gap-1 rounded-full bg-emerald-600 px-2 py-0.5 text-xs font-medium text-white">
+                    <x-icon name="shield" class="size-3" /> Verified
+                </span>
+            @endif
+        </div>
+        <div class="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-gray-500">
+            @if ($rating > 0)
+                <span class="flex items-center gap-1 text-amber-500">
+                    <x-icon name="star" class="size-4 fill-current" /> {{ $rating }} ({{ $reviews->count() }} reviews)
+                </span>
+            @endif
+            <span>{{ $business->category }}{{ $business->sub_category ? ' · ' . $business->sub_category : '' }}</span>
+            <span class="flex items-center gap-1">
+                <x-icon name="location" class="size-4 text-gray-400" /> {{ $business->city }}, {{ $business->country }}
+            </span>
+        </div>
+
+        {{-- Photo gallery --}}
+        <div class="mt-5 grid grid-cols-1 gap-2 sm:h-80 sm:grid-cols-[2fr_1fr]">
+            <button
+                type="button"
+                class="relative h-56 w-full overflow-hidden rounded-xl bg-gray-100 sm:h-full"
+                @if ($heroMain) data-gallery-trigger data-type="image" data-src="{{ $heroMain }}" @endif
+            >
+                @if ($heroMain)
+                    <img src="{{ $heroMain }}" alt="{{ $business->name }}" class="h-full w-full object-cover">
+                @else
+                    <div class="flex h-full w-full items-center justify-center bg-gradient-to-br from-violet-100 via-violet-50 to-white">
+                        <x-icon name="building" class="size-16 text-violet-200" />
+                    </div>
+                @endif
+            </button>
+
+            @if ($heroThumbs->isNotEmpty())
+                <div class="grid grid-cols-3 gap-2 sm:grid-cols-1">
+                    @foreach ($heroThumbs as $i => $thumb)
+                        <button
+                            type="button"
+                            class="relative h-24 w-full overflow-hidden rounded-xl bg-gray-100 sm:h-full"
+                            data-gallery-trigger data-type="image" data-src="{{ $thumb }}"
+                        >
+                            <img src="{{ $thumb }}" alt="{{ $business->name }} photo" class="h-full w-full object-cover">
+                            @if ($i === $heroThumbs->count() - 1 && $heroExtra > 0)
+                                <span class="absolute inset-0 flex items-center justify-center bg-black/50 text-sm font-semibold text-white">
+                                    +{{ $heroExtra }} more
+                                </span>
+                            @endif
+                        </button>
+                    @endforeach
+                </div>
+            @endif
+        </div>
+
+        {{-- Logo + name row --}}
+        <div class="mt-5 flex items-center gap-3">
+            <div class="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm">
                 @if ($business->logo_url)
                     <img src="{{ $business->logo_url }}" alt="{{ $business->name }} logo" class="h-full w-full object-cover">
                 @else
-                    <x-icon name="building" class="size-10 text-gray-300" />
+                    <x-icon name="building" class="size-6 text-gray-300" />
                 @endif
             </div>
-            <div class="pb-2">
-                <div class="flex items-center gap-2">
-                    <h1 class="text-xl font-bold text-gray-900 sm:text-2xl">{{ $business->name }}</h1>
-                    @if ($business->status === 'Verified')
-                        <span class="flex items-center gap-1 rounded-full bg-emerald-600 px-2 py-0.5 text-xs font-medium text-white">
-                            <x-icon name="shield" class="size-3" /> Verified
-                        </span>
-                    @endif
-                </div>
-                <p class="mt-1 text-sm text-gray-500">{{ $business->category }}{{ $business->sub_category ? ' · ' . $business->sub_category : '' }}</p>
-                <div class="mt-1 flex items-center gap-3 text-sm text-gray-500">
-                    <span class="flex items-center gap-1">
-                        <x-icon name="location" class="size-4 text-gray-400" /> {{ $business->city }}, {{ $business->country }}
-                    </span>
-                    @if ($rating > 0)
-                        <span class="flex items-center gap-1 text-amber-500">
-                            <x-icon name="star" class="size-4 fill-current" /> {{ $rating }} ({{ $reviews->count() }})
-                        </span>
-                    @endif
-                </div>
-            </div>
+            <p class="text-sm text-gray-500">{{ $business->business_type ?: 'Business' }} in {{ $business->city }}</p>
         </div>
 
         <div class="mt-10 grid grid-cols-1 gap-10 pb-16 lg:grid-cols-3">
