@@ -2,6 +2,11 @@
 
 use Illuminate\Http\Request;
 
+// PHP 8.5 deprecates PDO::MYSQL_ATTR_SSL_CA in favor of Pdo\Mysql::ATTR_SSL_CA;
+// Laravel's MySQL connector still references the old constant. Harmless, but
+// noisy in local dev — suppress deprecation notices from surfacing in output.
+error_reporting(E_ALL & ~E_DEPRECATED);
+
 define('LARAVEL_START', microtime(true));
 
 // Determine if the application is in maintenance mode...
