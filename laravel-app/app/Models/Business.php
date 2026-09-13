@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasCamelCaseJson;
 use Illuminate\Database\Eloquent\Model;
 
 class Business extends Model
 {
+    use HasCamelCaseJson;
+
     protected $fillable = [
         'slug',
         'name',
@@ -36,6 +39,10 @@ class Business extends Model
         'status',
         'leads',
         'joined',
+    ];
+
+    protected $attributes = [
+        'gallery_urls' => '[]',
     ];
 
     protected function casts(): array

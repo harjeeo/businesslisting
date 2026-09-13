@@ -1,4 +1,4 @@
-const API_URL = import.meta.env.VITE_API_URL ?? "http://localhost:4000/api";
+const API_URL = import.meta.env.VITE_API_URL ?? "http://localhost:8000/api";
 
 let authToken: string | null = localStorage.getItem("auth_token");
 
@@ -34,7 +34,7 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   const data = await res.json().catch(() => undefined);
 
   if (!res.ok) {
-    throw new ApiError(res.status, data?.error ?? res.statusText);
+    throw new ApiError(res.status, data?.error ?? data?.message ?? res.statusText);
   }
 
   return data as T;

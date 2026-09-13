@@ -21,6 +21,11 @@ return Application::configure(basePath: dirname(__DIR__))
             'import.key' => \App\Http\Middleware\RequireImportKey::class,
         ]);
 
+        // Our JSON columns default to '' (MySQL forbids a TEXT/JSON column
+        // default), so an intentionally empty string from the frontend must
+        // stay '' rather than being coerced to null and violating NOT NULL.
+        $middleware->remove(\Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class);
+
         Authenticate::redirectUsing(fn () => null);
     })
     ->withExceptions(function (Exceptions $exceptions) {

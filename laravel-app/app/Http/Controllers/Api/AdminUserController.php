@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AdminUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class AdminUserController extends Controller
 {
@@ -21,7 +22,7 @@ class AdminUserController extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->except(['password']);
+        $data = $this->snakeCaseInput($request->except(['password']));
         $data['password_hash'] = Hash::make($request->input('password') ?: 'password123');
 
         $admin = AdminUser::create($data);
@@ -32,7 +33,7 @@ class AdminUserController extends Controller
     public function update(Request $request, int $id)
     {
         $admin = AdminUser::findOrFail($id);
-        $data = $request->except(['password']);
+        $data = $this->snakeCaseInput($request->except(['password']));
 
         if ($request->filled('password')) {
             $data['password_hash'] = Hash::make($request->input('password'));
@@ -41,6 +42,16 @@ class AdminUserController extends Controller
         $admin->update($data);
 
         return response()->json($admin);
+    }
+
+    private function snakeCaseInput(array $input): array
+    {
+        $snakeCased = [];
+        foreach ($input as $key => $value) {
+            $snakeCased[Str::snake($key)] = $value;
+        }
+
+        return $snakeCased;
     }
 
     public function destroy(int $id)

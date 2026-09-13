@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasCamelCaseJson;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Sanctum\HasApiTokens;
 
 class AdminUser extends Model
 {
-    use HasApiTokens;
+    use HasApiTokens, HasCamelCaseJson;
 
     protected $fillable = [
         'name',

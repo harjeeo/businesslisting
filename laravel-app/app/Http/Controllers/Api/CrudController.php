@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 abstract class CrudController extends Controller
 {
@@ -23,7 +24,7 @@ abstract class CrudController extends Controller
 
     public function store(Request $request)
     {
-        $record = $this->model::create($request->all());
+        $record = $this->model::create($this->snakeCaseInput($request));
 
         return response()->json($record, 201);
     }
@@ -31,9 +32,19 @@ abstract class CrudController extends Controller
     public function update(Request $request, int $id)
     {
         $record = $this->model::findOrFail($id);
-        $record->update($request->all());
+        $record->update($this->snakeCaseInput($request));
 
         return response()->json($record);
+    }
+
+    protected function snakeCaseInput(Request $request): array
+    {
+        $snakeCased = [];
+        foreach ($request->all() as $key => $value) {
+            $snakeCased[Str::snake($key)] = $value;
+        }
+
+        return $snakeCased;
     }
 
     public function destroy(int $id)
