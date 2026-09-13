@@ -7,52 +7,34 @@
     </div>
 
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div class="-mt-12 flex flex-col gap-4 sm:-mt-16 sm:flex-row sm:items-end sm:justify-between">
-            <div class="flex items-end gap-4">
-                <div class="flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-2xl border-4 border-white bg-white shadow-md sm:h-32 sm:w-32">
-                    @if ($business->logo_url)
-                        <img src="{{ $business->logo_url }}" alt="{{ $business->name }} logo" class="h-full w-full object-cover">
-                    @else
-                        <x-icon name="building" class="size-10 text-gray-300" />
+        <div class="-mt-12 flex items-end gap-4 sm:-mt-16">
+            <div class="flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-2xl border-4 border-white bg-white shadow-md sm:h-32 sm:w-32">
+                @if ($business->logo_url)
+                    <img src="{{ $business->logo_url }}" alt="{{ $business->name }} logo" class="h-full w-full object-cover">
+                @else
+                    <x-icon name="building" class="size-10 text-gray-300" />
+                @endif
+            </div>
+            <div class="pb-2">
+                <div class="flex items-center gap-2">
+                    <h1 class="text-xl font-bold text-gray-900 sm:text-2xl">{{ $business->name }}</h1>
+                    @if ($business->status === 'Verified')
+                        <span class="flex items-center gap-1 rounded-full bg-emerald-600 px-2 py-0.5 text-xs font-medium text-white">
+                            <x-icon name="shield" class="size-3" /> Verified
+                        </span>
                     @endif
                 </div>
-                <div class="pb-2">
-                    <div class="flex items-center gap-2">
-                        <h1 class="text-xl font-bold text-gray-900 sm:text-2xl">{{ $business->name }}</h1>
-                        @if ($business->status === 'Verified')
-                            <span class="flex items-center gap-1 rounded-full bg-emerald-600 px-2 py-0.5 text-xs font-medium text-white">
-                                <x-icon name="shield" class="size-3" /> Verified
-                            </span>
-                        @endif
-                    </div>
-                    <p class="mt-1 text-sm text-gray-500">{{ $business->category }}{{ $business->sub_category ? ' · ' . $business->sub_category : '' }}</p>
-                    <div class="mt-1 flex items-center gap-3 text-sm text-gray-500">
-                        <span class="flex items-center gap-1">
-                            <x-icon name="location" class="size-4 text-gray-400" /> {{ $business->city }}, {{ $business->country }}
+                <p class="mt-1 text-sm text-gray-500">{{ $business->category }}{{ $business->sub_category ? ' · ' . $business->sub_category : '' }}</p>
+                <div class="mt-1 flex items-center gap-3 text-sm text-gray-500">
+                    <span class="flex items-center gap-1">
+                        <x-icon name="location" class="size-4 text-gray-400" /> {{ $business->city }}, {{ $business->country }}
+                    </span>
+                    @if ($rating > 0)
+                        <span class="flex items-center gap-1 text-amber-500">
+                            <x-icon name="star" class="size-4 fill-current" /> {{ $rating }} ({{ $reviews->count() }})
                         </span>
-                        @if ($rating > 0)
-                            <span class="flex items-center gap-1 text-amber-500">
-                                <x-icon name="star" class="size-4 fill-current" /> {{ $rating }} ({{ $reviews->count() }})
-                            </span>
-                        @endif
-                    </div>
+                    @endif
                 </div>
-            </div>
-
-            <div class="flex flex-wrap gap-2 pb-2">
-                @if ($business->phone)
-                    <a href="tel:{{ $business->phone }}" class="flex items-center gap-2 rounded-lg bg-violet-600 px-4 py-2 text-sm font-semibold text-white hover:bg-violet-700">
-                        <x-icon name="phone" class="size-4" /> Call
-                    </a>
-                @endif
-                @if ($business->whatsapp)
-                    <a href="https://wa.me/{{ preg_replace('/\D/', '', $business->whatsapp) }}" target="_blank" rel="noopener" class="flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700">
-                        <x-icon name="whatsapp" class="size-4" /> WhatsApp
-                    </a>
-                @endif
-                <a href="#enquire" class="flex items-center gap-2 rounded-lg border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50">
-                    <x-icon name="mail" class="size-4" /> Get Quote
-                </a>
             </div>
         </div>
 
@@ -199,6 +181,22 @@
 
             {{-- Sidebar --}}
             <div class="space-y-6">
+                <div class="flex flex-col gap-2 rounded-xl border border-gray-100 p-5">
+                    @if ($business->phone)
+                        <a href="tel:{{ $business->phone }}" class="flex w-full items-center justify-center gap-2 rounded-lg bg-violet-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-violet-700">
+                            <x-icon name="phone" class="size-4" /> Call
+                        </a>
+                    @endif
+                    @if ($business->whatsapp)
+                        <a href="https://wa.me/{{ preg_replace('/\D/', '', $business->whatsapp) }}" target="_blank" rel="noopener" class="flex w-full items-center justify-center gap-2 rounded-lg bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-emerald-700">
+                            <x-icon name="whatsapp" class="size-4" /> WhatsApp
+                        </a>
+                    @endif
+                    <a href="#enquire" class="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-300 px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-50">
+                        <x-icon name="mail" class="size-4" /> Get Quote
+                    </a>
+                </div>
+
                 <div class="rounded-xl border border-gray-100 p-5">
                     <h3 class="text-sm font-semibold text-gray-900">Contact Details</h3>
                     <ul class="mt-3 space-y-3 text-sm text-gray-600">
