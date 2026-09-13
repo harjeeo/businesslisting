@@ -6,7 +6,7 @@
             ->unique()
             ->values();
         $heroMain = $heroImages->first();
-        $heroThumbs = $heroImages->slice(1, 3);
+        $heroThumbs = $heroImages->slice(1, 4);
         $heroExtra = $heroImages->count() - 1 - $heroThumbs->count();
     @endphp
 
@@ -49,17 +49,17 @@
             </button>
 
             @if ($heroThumbs->isNotEmpty())
-                <div class="grid grid-cols-3 gap-2 sm:grid-cols-1">
+                <div class="grid grid-cols-4 gap-2 sm:grid-cols-1 sm:grid-rows-4">
                     @foreach ($heroThumbs as $i => $thumb)
                         <button
                             type="button"
-                            class="relative h-24 w-full overflow-hidden rounded-xl bg-gray-100 sm:h-full"
+                            class="group relative h-24 w-full overflow-hidden rounded-xl bg-gray-100 sm:h-auto"
                             data-gallery-trigger data-type="image" data-src="{{ $thumb }}"
                         >
-                            <img src="{{ $thumb }}" alt="{{ $business->name }} photo" class="h-full w-full object-cover">
+                            <img src="{{ $thumb }}" alt="{{ $business->name }} photo" class="h-full w-full object-cover transition group-hover:scale-105">
                             @if ($i === $heroThumbs->count() - 1 && $heroExtra > 0)
-                                <span class="absolute inset-0 flex items-center justify-center bg-black/50 text-sm font-semibold text-white">
-                                    +{{ $heroExtra }} more
+                                <span class="absolute inset-0 flex items-center justify-center bg-black/60 text-lg font-bold text-white">
+                                    +{{ $heroExtra }}
                                 </span>
                             @endif
                         </button>
