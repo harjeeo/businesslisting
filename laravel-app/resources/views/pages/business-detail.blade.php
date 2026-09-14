@@ -1,15 +1,4 @@
 <x-layout :title="$business->name" :description="$business->description">
-    @php
-        $heroImages = collect([$business->cover_url, $business->logo_url])
-            ->merge($business->gallery_urls ?? [])
-            ->filter()
-            ->unique()
-            ->values();
-        $heroMain = $heroImages->first();
-        $heroThumbs = $heroImages->slice(1, 4);
-        $heroExtra = $heroImages->count() - 1 - $heroThumbs->count();
-    @endphp
-
     <div class="mx-auto max-w-7xl px-4 pt-8 sm:px-6 lg:px-8">
         {{-- Header --}}
         <div class="flex flex-wrap items-center gap-2">
@@ -30,42 +19,6 @@
             <span class="flex items-center gap-1">
                 <x-icon name="location" class="size-4 text-gray-400" /> {{ $business->city }}, {{ $business->country }}
             </span>
-        </div>
-
-        {{-- Photo gallery --}}
-        <div class="mt-5 grid grid-cols-1 gap-2 sm:h-80 sm:grid-cols-[2fr_1fr]">
-            <button
-                type="button"
-                class="relative h-56 w-full overflow-hidden rounded-xl bg-gray-100 sm:h-full"
-                @if ($heroMain) data-gallery-trigger data-type="image" data-src="{{ $heroMain }}" @endif
-            >
-                @if ($heroMain)
-                    <img src="{{ $heroMain }}" alt="{{ $business->name }}" class="h-full w-full object-cover">
-                @else
-                    <div class="flex h-full w-full items-center justify-center bg-gradient-to-br from-violet-100 via-violet-50 to-white">
-                        <x-icon name="building" class="size-16 text-violet-200" />
-                    </div>
-                @endif
-            </button>
-
-            @if ($heroThumbs->isNotEmpty())
-                <div class="grid grid-cols-4 gap-2 sm:grid-cols-1 sm:grid-rows-4">
-                    @foreach ($heroThumbs as $i => $thumb)
-                        <button
-                            type="button"
-                            class="group relative h-24 w-full overflow-hidden rounded-xl bg-gray-100 sm:h-auto"
-                            data-gallery-trigger data-type="image" data-src="{{ $thumb }}"
-                        >
-                            <img src="{{ $thumb }}" alt="{{ $business->name }} photo" class="h-full w-full object-cover transition group-hover:scale-105">
-                            @if ($i === $heroThumbs->count() - 1 && $heroExtra > 0)
-                                <span class="absolute inset-0 flex items-center justify-center bg-black/60 text-lg font-bold text-white">
-                                    +{{ $heroExtra }}
-                                </span>
-                            @endif
-                        </button>
-                    @endforeach
-                </div>
-            @endif
         </div>
 
         {{-- Logo + name row --}}
